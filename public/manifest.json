@@ -1,0 +1,8 @@
+{
+  "short_name": "Sistem Pelayaran",
+  "name": "Sistem Pelayaran Dishub Kota Bandung",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

@@ -1,0 +1,90 @@
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.main-content {
+    background-color: white;
+}
+
+.title {
+    color: #000;
+    font-family: Lato;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#search {
+    border-radius: 0;
+
+}
+
+.src {
+    border-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+}
+
+.search {
+    height: 32px;
+    font-size: 14px;
+}
+
+.custom-lebar {
+    overflow-y: auto;
+}
+
+.tab {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.tables {
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+.tables thead td {
+    font-weight: bold;
+    background-color: #c7ecee;
+}
+
+.tables td {
+    text-align: center;
+    vertical-align: top;
+
+    border: 1px solid black;
+    /* Batas dengan warna abu-abu (#ddd) dan ketebalan 1px */
+    padding: 8px;
+}
+
+.tables .head {
+    background-color: #8BC5A9;
+}
+
+.tables .custom {
+    width: 50%;
+}
+
+.tables .custom-width {
+    width: 80px;
+    height: 5px;
+}
+
+.custom-td {
+    width: 50%;
+}
+
+.print-button {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btnDownload {
+    color: white;
+}
