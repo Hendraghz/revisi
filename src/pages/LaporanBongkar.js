@@ -211,6 +211,9 @@ export default function LaporanPage() {
                         <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
                           Hapus
                         </Button>
+                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="primary">
+                          Validasi
+                        </Button>
                       </td>
                     </tr>
                   ))}

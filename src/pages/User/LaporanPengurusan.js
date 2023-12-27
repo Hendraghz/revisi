@@ -12,12 +12,30 @@ import useToken from '../../config/useRequireAuth';
 export default function LaporanPagePengurusan() {
   const [transportasi, setTransportasi] = useState([]);
   const { token, checkAndLogin } = useToken();
-  const [age, setAge] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const yearsArray = Array.from({ length: 22 }, (_, index) => 2013 + index);
+
+  const handleChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
 
   useEffect(() => {
     checkAndLogin();
     getTransportasi();
   }, []);
+
+  const formatDate = (dateString) => {
+    const dateObject = new Date(dateString);
+    const year = dateObject.getUTCFullYear();
+    const month = (dateObject.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getUTCDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const getTransportasi = async () => {
     const response = await axios.get('http://localhost:3001/transportasi/show', {
@@ -27,10 +45,7 @@ export default function LaporanPagePengurusan() {
     });
     setTransportasi(response.data.data);
   };
-  
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
@@ -80,23 +95,51 @@ export default function LaporanPagePengurusan() {
         </Stack>
 
         <Container fluid>
-        <FormControl sx={{ minWidth: 220, mb:2}}>
-        <InputLabel id="demo-simple-select-helper-label">Filter Bulan</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={age}
-          label="Filter Bulan"
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>Pilih Bulan</em>
-          </MenuItem>
-          <MenuItem value={10}>January</MenuItem>
-          <MenuItem value={20}>Februari</MenuItem>
-          <MenuItem value={30}>Maret</MenuItem>
-        </Select>
-      </FormControl>
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+            <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={selectedMonth}
+              label="Filter Bulan"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="Januari">Januari</MenuItem>
+              <MenuItem value="Februari">Februari</MenuItem>
+              <MenuItem value="Maret">Maret</MenuItem>
+              <MenuItem value="April">April</MenuItem>
+              <MenuItem value="Mei">Mei</MenuItem>
+              <MenuItem value="Juni">Juni</MenuItem>
+              <MenuItem value="Juli">Juli</MenuItem>
+              <MenuItem value="Agustus">Agustus</MenuItem>
+              <MenuItem value="September">September</MenuItem>
+              <MenuItem value="Oktober">Oktober</MenuItem>
+              <MenuItem value="November">November</MenuItem>
+              <MenuItem value="November">November</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
+            <InputLabel id="filter-year-label">Filter Tahun</InputLabel>
+            <Select
+              labelId="filter-year-label"
+              id="filter-year"
+              value={selectedYear}
+              label="Filter Tahun"
+              onChange={handleYearChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {yearsArray.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <div className="custom-lebar">
             <Row className="tab">
               <Table className="tables">

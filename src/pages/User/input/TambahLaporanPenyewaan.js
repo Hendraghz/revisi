@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwtDecoded from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 // @mui
 import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../../../config/useRequireAuth';
+
 
 export default function TambahAdminPage() {
   const [tokenref, setToken] = useState('');
@@ -19,6 +20,7 @@ export default function TambahAdminPage() {
   const navigateTo = useNavigate();
 
   const [formData, setFormData] = useState({
+    tanggal:'',
     email,
     nama_perusahaan: '',
     penyewaan_peralatan: '',
@@ -54,10 +56,12 @@ export default function TambahAdminPage() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+    const decode = jwtDecoded(token);
+    const email = decode.email;
     try {
       const formDataForApi = new FormData();
-      formDataForApi.append('email', formData.email);
+      formDataForApi.append('tanggal', formData.tanggal);
+      formDataForApi.append('email', email);
       formDataForApi.append('nama_perusahaan', formData.nama_perusahaan);
       formDataForApi.append('penyewaan_peralatan', formData.penyewaan_peralatan);
       formDataForApi.append('kegiatan', formData.kegiatan);
@@ -78,7 +82,14 @@ export default function TambahAdminPage() {
       });
 
       // Handle successful response
-      navigateTo('/dashboard-user');
+      if (response.status === 200) {
+        Swal.fire({
+          title: 'Laporan Berhasil',
+          text: 'Di tambahkan',
+          icon: 'success',
+        });
+        navigateTo('/dashboard-user/laporan-user');
+      }
     } catch (error) {
       console.error('Error posting data:', error);
     }
@@ -100,27 +111,37 @@ export default function TambahAdminPage() {
         <Card>
           <form onSubmit={handleFormSubmit}>
             <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 530 }}>
-              <FormLabel sx={{ color: 'black' }}>Nama Perusahaan/Perorangan</FormLabel>
+            <FormLabel sx={{ color: 'black', mb:2 }}>Tanggal</FormLabel>
+              <TextField
+                type="date"
+                variant="outlined"
+                placeholder=""
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                name="tanggal"
+                value={formData.tanggal}
+                onChange={handleInputChange}
+              />
+              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Perusahaan/Perorangan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 name="nama_perusahaan"
                 value={formData.nama_perusahaan}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black' }}>Penyewa Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Penyewa Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 value={formData.penyewaan_peralatan}
                 onChange={handleInputChange}
                 name="penyewaan_peralatan"
               />
-              <FormLabel sx={{ color: 'black' }}>Kegiatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Kegiatan</FormLabel>
               <Select
                 labelId="select-kegiatan"
                 id="select-kegiatan"
@@ -128,6 +149,7 @@ export default function TambahAdminPage() {
                 name="kegiatan"
                 onChange={handleInputChange}
                 label="Kegiatan"
+                sx={{mb:3}}
               >
                 <MenuItem value={'angkutan laut'}>Angkutan Laut</MenuItem>
                 <MenuItem value={'bongkar muat'}>Bongkar Muat</MenuItem>
@@ -137,7 +159,7 @@ export default function TambahAdminPage() {
                 <MenuItem value={'perbaikan kapal'}>Perbaikan dan Pemeliharaan Kapal</MenuItem>
               </Select>
               <h3>Peralatan Angkutan Laut</h3>
-              <FormLabel sx={{ color: 'black' }}>Nama Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black' , mb:2}}>Nama Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -145,9 +167,9 @@ export default function TambahAdminPage() {
                 value={formData.nama_peralatanAL}
                 name="nama_peralatanAL"
                 onChange={handleInputChange}
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Jumlah Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Jumlah Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -155,10 +177,10 @@ export default function TambahAdminPage() {
                 value={formData.jumlah_satuanAL}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
               <h3>Peralatan Jasa Terkait</h3>
-              <FormLabel sx={{ color: 'black' }}>Nama Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -166,9 +188,9 @@ export default function TambahAdminPage() {
                 name="nama_peralatanJT"
                 value={formData.nama_peralatanJT}
                 onChange={handleInputChange}
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Jumlah Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Jumlah Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -176,9 +198,9 @@ export default function TambahAdminPage() {
                 value={formData.jumlah_satuanJT}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Masa Sewa (Hari)</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Masa Sewa (Hari)</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -186,10 +208,10 @@ export default function TambahAdminPage() {
                 name="masa_sewa"
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
               <h3>Jangka Waktu (Tgl/Bulan/Tahun)</h3>
-              <FormLabel sx={{ color: 'black' }}>Mulai</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Mulai</FormLabel>
               <TextField
                 type="date"
                 variant="outlined"
@@ -197,9 +219,9 @@ export default function TambahAdminPage() {
                 value={formData.jw_mulai}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Selesai</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Selesai</FormLabel>
               <TextField
                 type="date"
                 name="jw_selesai"
@@ -207,13 +229,13 @@ export default function TambahAdminPage() {
                 onChange={handleInputChange}
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Upload Surat Penunjukan Perjanjian Sewa/Purchase Order</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Upload Surat Penunjukan Perjanjian Sewa/Purchase Order</FormLabel>
               <TextField
                 type="file"
                 variant="outlined"
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 name="surat"
                 multiple
                 onChange={handleFileChange}

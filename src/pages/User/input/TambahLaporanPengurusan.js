@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import jwtDecoded from 'jwt-decode';
-import { ToastContainer, toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -33,14 +33,15 @@ export default function TambahAdminPage() {
   const [lainnyaSelected, setLainnyaSelected] = useState(false);
   const { token, checkAndLogin } = useToken();
   const [totalVolume, setTotalVolume] = useState('');
-  const [totalVolumeImport, setTotalVolumeImport] = useState('');
-  const [totalVolumeExport, setTotalVolumeExport] = useState('');
-  const [totalVolumeAntarPulau, setTotalVolumeAntarPulau] = useState('');
-  const [totalVolumeAntarKota, setTotalVolumeAntarKota] = useState('');
+  const [totalVolumeImport, setTotalVolumeImport] = useState(0);
+  const [totalVolumeExport, setTotalVolumeExport] = useState(0);
+  const [totalVolumeAntarPulau, setTotalVolumeAntarPulau] = useState(0);
+  const [totalVolumeAntarKota, setTotalVolumeAntarKota] = useState(0);
   const navigateTo = useNavigate();
   const [selectedMuatanOption, setSelectedMuatanOption] = useState(''); // Add this line
 
   const [formData, setFormData] = useState({
+    tanggal: '',
     email,
     namaPerusahaan: '',
     nama_pemilik_brg: '',
@@ -56,19 +57,18 @@ export default function TambahAdminPage() {
     asal_antarkota: '',
     asal_antarpulau: '',
     muatan: '',
-    in_imp_pib: '',
-    volumeimport: '',
-    volumeexport: '',
-    volumeantarpulau: '',
-    volumeantarkota: '',
-    in_ap_pib: '',
-    in_ap_volume: '',
-    out_imp_pib: '',
-    out_imp_volume: '',
-    out_ap_pib: '',
-    out_ap_volume: '',
-    jml_in_out: '',
-    surat: null,
+    imp_asal: '',
+    imp_voulme: '',
+    exp_tujuan: '',
+    exp_voulme: '',
+    ap_asal: '',
+    ap_tujuan: '',
+    ap_voulme: '',
+    ak_asal: '',
+    ak_tujuan: '',
+    ak_voulme: '',
+    jml_muatan: '',
+    filename: null,
   });
 
   useEffect(() => {
@@ -165,65 +165,67 @@ export default function TambahAdminPage() {
     // Menangani perubahan input file
     setFormData({
       ...formData,
-      surat: e.target.files[0],
+      filename: e.target.files[0],
     });
   };
   const handleChangeRadio = (e) => {
     const value = e.target.value;
     setSelectedMuatanOption(value);
-    console.log(value)
+    console.log(value);
     // Clear form fields based on the selected radio option
     if (value === 'impor') {
-    setFormData({
-      ...formData,
-      asal_imp: '',
-    });
-    setTotalVolumeImport('');
-    setTotalVolume('');
-    setTotalVolumeExport('');
-    setTotalVolumeAntarPulau('');
-    setTotalVolumeAntarKota('');
-  } else if (value === 'ekspor') {
-    setFormData({
-      ...formData,
-      tujuan_exp: '',
-    });
-    setTotalVolumeExport('');
-    setTotalVolumeImport('');
-    setTotalVolumeAntarPulau('');
-    setTotalVolume('');
-    setTotalVolumeAntarKota('');
-  } else if (value === 'antarPulau') {
-    setFormData({
-      ...formData,
-      asal_antarpulau: '',
-      tujuan_antarpulau: '',
-    });
-    setTotalVolumeAntarPulau('');
-    setTotalVolumeImport('');
-    setTotalVolume('');
-    setTotalVolumeExport('');
-    setTotalVolumeAntarKota('');
-  } else if (value === 'antarKota') {
-    setFormData({
-      ...formData,
-      asal_antarkota: '',
-      tujuan_antarkota: '',
-    });
-    setTotalVolumeAntarKota('');
-    setTotalVolumeAntarPulau('');
-    setTotalVolumeImport('');
-    setTotalVolume('');
-    setTotalVolumeExport('');
-  }
+      setFormData({
+        ...formData,
+        asal_imp: '',
+      });
+      setTotalVolumeImport('');
+      setTotalVolume('');
+      setTotalVolumeExport('');
+      setTotalVolumeAntarPulau('');
+      setTotalVolumeAntarKota('');
+    } else if (value === 'ekspor') {
+      setFormData({
+        ...formData,
+        tujuan_exp: '',
+      });
+      setTotalVolumeExport('');
+      setTotalVolumeImport('');
+      setTotalVolumeAntarPulau('');
+      setTotalVolume('');
+      setTotalVolumeAntarKota('');
+    } else if (value === 'antarPulau') {
+      setFormData({
+        ...formData,
+        asal_antarpulau: '',
+        tujuan_antarpulau: '',
+      });
+      setTotalVolumeAntarPulau('');
+      setTotalVolumeImport('');
+      setTotalVolume('');
+      setTotalVolumeExport('');
+      setTotalVolumeAntarKota('');
+    } else if (value === 'antarKota') {
+      setFormData({
+        ...formData,
+        asal_antarkota: '',
+        tujuan_antarkota: '',
+      });
+      setTotalVolumeAntarKota('');
+      setTotalVolumeAntarPulau('');
+      setTotalVolumeImport('');
+      setTotalVolume('');
+      setTotalVolumeExport('');
+    }
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+    const decode = jwtDecoded(token);
+    const email = decode.email;
     try {
       const formDataForApi = new FormData();
-      formDataForApi.append('email', formData.email);
+      formDataForApi.append('tanggal', formData.tanggal);
+      formDataForApi.append('email', email);
       formDataForApi.append('nama_perusahaan', formData.namaPerusahaan);
       formDataForApi.append('nama_pemilik_brg', formData.nama_pemilik_brg);
       formDataForApi.append('nama_brg', formData.nama_brg);
@@ -232,15 +234,17 @@ export default function TambahAdminPage() {
       formDataForApi.append('no_kendaraan', formData.no_kendaraan);
       formDataForApi.append('jenis_kegiatan', formData.jenis_kegiatan);
       formDataForApi.append('muatan', formData.muatan);
-      formDataForApi.append('in_imp_pib', formData.in_imp_pib);
-      formDataForApi.append('in_imp_volume', formData.in_imp_volume);
-      formDataForApi.append('in_ap_pib', formData.in_ap_pib);
-      formDataForApi.append('in_ap_volume', formData.in_ap_volume);
-      formDataForApi.append('out_imp_pib', formData.out_imp_pib);
-      formDataForApi.append('out_imp_volume', formData.out_imp_volume);
-      formDataForApi.append('out_ap_pib', formData.out_ap_pib);
-      formDataForApi.append('out_ap_volume', formData.out_ap_volume);
-      formDataForApi.append('jml_in_out', totalVolume.toString());
+      formDataForApi.append('imp_asal', formData.imp_asal);
+      formDataForApi.append('imp_voulme', totalVolumeImport);
+      formDataForApi.append('exp_tujuan', formData.exp_tujuan);
+      formDataForApi.append('exp_voulme', totalVolumeExport);
+      formDataForApi.append('ap_asal', formData.ap_asal);
+      formDataForApi.append('ap_tujuan', formData.ap_tujuan);
+      formDataForApi.append('ap_voulme', totalVolumeAntarPulau);
+      formDataForApi.append('ak_asal', formData.ak_asal);
+      formDataForApi.append('ak_tujuan', formData.ak_tujuan);
+      formDataForApi.append('ak_voulme', totalVolumeAntarKota);
+      formDataForApi.append('jml_muatan', totalVolume);
 
       const response = await axios.post('http://localhost:3001/transportasi', formDataForApi, {
         headers: {
@@ -250,11 +254,14 @@ export default function TambahAdminPage() {
       });
 
       // Handle successful response
-      console.log('Response data:', response.data);
-      toast.success('Laporan berhasil ditambahkan!', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      navigateTo('/dashboard-user/laporan-user');
+      if (response.status === 200) {
+        Swal.fire({
+          title: 'Laporan Berhasil',
+          text: 'Di tambahkan',
+          icon: 'success',
+        });
+        navigateTo('/dashboard-user/laporan-user');
+      }
     } catch (error) {
       console.error('Error posting data:', error);
     }
@@ -275,128 +282,157 @@ export default function TambahAdminPage() {
 
         <Card>
           <form onSubmit={handleFormSubmit}>
-            <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 730 }}>
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Pemilik Barang</FormLabel>
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                name="nama_pemilik_brg"
-                value={formData.nama_pemilik_brg}
-                onChange={handleInputChange}
-              />
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Barang</FormLabel>
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                name="nama_brg"
-                value={formData.nama_brg}
-                onChange={handleInputChange}
-              />
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Moda Transportasi</FormLabel>
-              <Select
-                labelId="select-moda-transportasi"
-                id="select-moda-transportasi"
-                name="jenis_moda_trns"
-                sx={{ mb: 3 }}
-                value={formData.jenis_moda_trns}
-                onChange={handleInputChange}
-              >
-                <MenuItem value={'kapal'}>Kapal</MenuItem>
-                <MenuItem value={'pesawat'}>Pesawat</MenuItem>
-                <MenuItem value={'kereta'}>Kereta</MenuItem>
-                <MenuItem value={'truck'}>Truck</MenuItem>
-              </Select>
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Kapal/Pesawat</FormLabel>
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                name="nama_kpl_pswt"
-                value={formData.nama_kpl_pswt}
-                onChange={handleInputChange}
-              />
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Nomor Kendaraan</FormLabel>
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder=""
-                name="no_kendaraan"
-                value={formData.no_kendaraan}
-                onChange={handleInputChange}
-                sx={{ backgroundColor: '#fafafa', mb: 3 }}
-              />
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Kegiatan</FormLabel>
-              <Select
-                labelId="jenis-kegiatan"
-                id="jenis-kegiatan"
-                name="jenis_kegiatan"
-                sx={{ mb: 3 }}
-                value={formData.jenis_kegiatan}
-                onChange={handleInputChange}
-              >
-                <MenuItem value="penerimaan">Penerimaan</MenuItem>
-                <MenuItem value="pengelolaan-penyimpanan">Pengelolaan Penyimpanan</MenuItem>
-                <MenuItem value="sortasi">Sortasi</MenuItem>
-                <MenuItem value="pengepakan">Pengepakan</MenuItem>
-                <MenuItem value="penandaan">Penandaan</MenuItem>
-                <MenuItem value="pengukuran">Pengukuran</MenuItem>
-                <MenuItem value="penimbangan">Penimbangan</MenuItem>
-                <MenuItem value="pengelolaan-transportasi">Pengelolaan Transportasi</MenuItem>
-                <MenuItem value="penerbitan-dokumen">
-                  Penerbitan Dokumen Angkutan Barang melalui Moda Transportasi Darat, Laut, dan/atau Udara
-                </MenuItem>
-                <MenuItem value="pengurusan-penyelesaian-dokumen">Pengurusan Penyelesaian Dokumen</MenuItem>
-                <MenuItem value="pemesanan-ruangan-pengangkut">Pemesanan Ruangan Pengangkut</MenuItem>
-                <MenuItem value="pengiriman">Pengiriman</MenuItem>
-                <MenuItem value="pengelolaan-pendistribusian">Pengelolaan Pendistribusian</MenuItem>
-                <MenuItem value="perhitungan-biaya">Perhitungan Biaya Angkutan dan Logistik</MenuItem>
-                <MenuItem value="klaim">Klaim</MenuItem>
-                <MenuItem value="asuransi">Asuransi atas Pengiriman Barang</MenuItem>
-                <MenuItem value="penyelesaian-tagihan">Penyelesaian Tagihan dan Biaya Lainnya yang Diperlukan</MenuItem>
-                <MenuItem value="penyediaan-sistem-informasi">Penyediaan Sistem Informasi dan Komunikasi</MenuItem>
-                <MenuItem value="layanan-logistik">
-                  Layanan Logistik Penyediaan Layanan Logistik di Pasar Nasional dan Internasional Secara Konvensional
-                  dan/atau Elektronik
-                </MenuItem>
-                <MenuItem value="lainnya">Lainnya</MenuItem>
-              </Select>
-              {lainnyaSelected && (
-                <>
-                  {/* Additional text field for "Detail Kegiatan (Lainnya)" */}
-                  <FormLabel sx={{ color: 'black', mb: 2 }}>Detail Kegiatan (Lainnya)</FormLabel>
-                  <TextField
-                    type="text"
-                    variant="outlined"
-                    placeholder=""
-                    sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="lainnya_detail"
-                    value={formData.lainnya_detail}
-                    onChange={handleInputChange}
-                  />
-                </>
-              )}
-              <FormLabel sx={{ color: 'black', mb: 2 }}>Muatan</FormLabel>
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                name="muatan"
-                value={formData.muatan}
-                onChange={handleInputChange}
-              />
+            <Stack direction="row">
+              <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 350 }}>
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Tanggal</FormLabel>
+                <TextField
+                  type="date"
+                  variant="outlined"
+                  placeholder=""
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  name="tanggal"
+                  value={formData.tanggal}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Pemilik Barang</FormLabel>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  placeholder=""
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  name="nama_pemilik_brg"
+                  value={formData.nama_pemilik_brg}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Barang</FormLabel>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  placeholder=""
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  name="nama_brg"
+                  value={formData.nama_brg}
+                  onChange={handleInputChange}
+                  size="small"
+
+                />
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Moda Transportasi</FormLabel>
+                <Select
+                  labelId="select-moda-transportasi"
+                  id="select-moda-transportasi"
+                  name="jenis_moda_trns"
+                  sx={{ mb: 3 }}
+                  value={formData.jenis_moda_trns}
+                  onChange={handleInputChange}
+                  size="small"
+                >
+                  <MenuItem value={'kapal'}>Kapal</MenuItem>
+                  <MenuItem value={'pesawat'}>Pesawat</MenuItem>
+                  <MenuItem value={'kereta'}>Kereta</MenuItem>
+                  <MenuItem value={'truck'}>Truck</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 350 }}>
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Kapal/Pesawat</FormLabel>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  placeholder=""
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  name="nama_kpl_pswt"
+                  value={formData.nama_kpl_pswt}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Nomor Kendaraan</FormLabel>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  placeholder=""
+                  name="no_kendaraan"
+                  value={formData.no_kendaraan}
+                  onChange={handleInputChange}
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  size="small"
+                />
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Kegiatan</FormLabel>
+                <Select
+                  labelId="jenis-kegiatan"
+                  id="jenis-kegiatan"
+                  name="jenis_kegiatan"
+                  sx={{ mb: 3 }}
+                  value={formData.jenis_kegiatan}
+                  onChange={handleInputChange}
+                  size="small"
+                >
+                  <MenuItem value="penerimaan">Penerimaan</MenuItem>
+                  <MenuItem value="pengelolaan-penyimpanan">Pengelolaan Penyimpanan</MenuItem>
+                  <MenuItem value="sortasi">Sortasi</MenuItem>
+                  <MenuItem value="pengepakan">Pengepakan</MenuItem>
+                  <MenuItem value="penandaan">Penandaan</MenuItem>
+                  <MenuItem value="pengukuran">Pengukuran</MenuItem>
+                  <MenuItem value="penimbangan">Penimbangan</MenuItem>
+                  <MenuItem value="pengelolaan-transportasi">Pengelolaan Transportasi</MenuItem>
+                  <MenuItem value="penerbitan-dokumen">
+                    Penerbitan Dokumen Angkutan Barang melalui Moda Transportasi Darat, Laut, dan/atau Udara
+                  </MenuItem>
+                  <MenuItem value="pengurusan-penyelesaian-dokumen">Pengurusan Penyelesaian Dokumen</MenuItem>
+                  <MenuItem value="pemesanan-ruangan-pengangkut">Pemesanan Ruangan Pengangkut</MenuItem>
+                  <MenuItem value="pengiriman">Pengiriman</MenuItem>
+                  <MenuItem value="pengelolaan-pendistribusian">Pengelolaan Pendistribusian</MenuItem>
+                  <MenuItem value="perhitungan-biaya">Perhitungan Biaya Angkutan dan Logistik</MenuItem>
+                  <MenuItem value="klaim">Klaim</MenuItem>
+                  <MenuItem value="asuransi">Asuransi atas Pengiriman Barang</MenuItem>
+                  <MenuItem value="penyelesaian-tagihan">
+                    Penyelesaian Tagihan dan Biaya Lainnya yang Diperlukan
+                  </MenuItem>
+                  <MenuItem value="penyediaan-sistem-informasi">Penyediaan Sistem Informasi dan Komunikasi</MenuItem>
+                  <MenuItem value="layanan-logistik">
+                    Layanan Logistik Penyediaan Layanan Logistik di Pasar Nasional dan Internasional Secara Konvensional
+                    dan/atau Elektronik
+                  </MenuItem>
+                  <MenuItem value="lainnya">Lainnya</MenuItem>
+                </Select>
+                {lainnyaSelected && (
+                  <>
+                    {/* Additional text field for "Detail Kegiatan (Lainnya)" */}
+                    <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Kegiatan (Lainnya)</FormLabel>
+                    <TextField
+                      type="text"
+                      variant="outlined"
+                      placeholder=""
+                      sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                      name="lainnya_detail"
+                      value={formData.lainnya_detail}
+                      onChange={handleInputChange}
+                      size="small"
+                    />
+                  </>
+                )}
+                <FormLabel sx={{ color: 'black', mb: 2 }}>Muatan</FormLabel>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  placeholder=""
+                  sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                  name="muatan"
+                  value={formData.muatan}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </FormControl>
+            </Stack>
+            <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 550 }}>
               <h2>Muatan</h2>
               <RadioGroup
                 row
                 aria-label="muatan-options"
                 name="muatan-options"
                 value={selectedMuatanOption}
-                onChange={handleChangeRadio} 
+                onChange={handleChangeRadio}
+                size="small"
               >
                 <FormControlLabel value="impor" control={<Radio />} label="Impor" />
                 <FormControlLabel value="ekspor" control={<Radio />} label="Ekspor" />
@@ -412,9 +448,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="asal_imp"
-                    value={formData.asal_imp}
+                    name="imp_asal"
+                    value={formData.imp_asal}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Volume (Kg/Ton)</FormLabel>
                   <TextField
@@ -425,10 +462,11 @@ export default function TambahAdminPage() {
                     name="totalVolumeImport"
                     value={totalVolumeImport}
                     onChange={(e) => handleChangeVolume(e, 'Number 1')}
+                    size="small"
                   />
                 </>
               )}
-          {selectedMuatanOption === 'ekspor' && (
+              {selectedMuatanOption === 'ekspor' && (
                 <>
                   <h3>Ekspor</h3>
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Tujuan</FormLabel>
@@ -437,9 +475,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="tujuan_exp"
-                    value={formData.tujuan_exp}
+                    name="exp_tujuan"
+                    value={formData.exp_tujuan}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Volume (Kg/Ton)</FormLabel>
                   <TextField
@@ -450,10 +489,11 @@ export default function TambahAdminPage() {
                     name="totalVolumeExport"
                     value={totalVolumeExport}
                     onChange={(e) => handleChangeVolume(e, 'Number 2')}
+                    size="small"
                   />
                 </>
               )}
-             {selectedMuatanOption === 'antarPulau' && (
+              {selectedMuatanOption === 'antarPulau' && (
                 <>
                   <h3>Antar Pulau</h3>
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Asal</FormLabel>
@@ -462,9 +502,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="asal_antarpulau"
-                    value={formData.asal_antarpulau}
+                    name="ap_asal"
+                    value={formData.ap_asal}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Tujuan</FormLabel>
                   <TextField
@@ -472,9 +513,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="tujuan_antarpulau"
-                    value={formData.tujuan_antarpulau}
+                    name="ap_tujuan"
+                    value={formData.ap_tujuan}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Volume (Kg/Ton)</FormLabel>
                   <TextField
@@ -485,10 +527,11 @@ export default function TambahAdminPage() {
                     name="totalVolumeAntarPulau"
                     value={totalVolumeAntarPulau}
                     onChange={(e) => handleChangeVolume(e, 'Number 3')}
+                    size="small"
                   />
                 </>
               )}
-         {selectedMuatanOption === 'antarKota' && (
+              {selectedMuatanOption === 'antarKota' && (
                 <>
                   <h3>Antar Kota</h3>
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Asal</FormLabel>
@@ -497,9 +540,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="asal_antarkota"
-                    value={formData.asal_antarkota}
+                    name="ak_asal"
+                    value={formData.ak_asal}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Tujuan</FormLabel>
                   <TextField
@@ -507,9 +551,10 @@ export default function TambahAdminPage() {
                     variant="outlined"
                     placeholder=""
                     sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                    name="tujuan_antarkota"
-                    value={formData.tujuan_antarkota}
+                    name="ak_tujuan"
+                    value={formData.ak_tujuan}
                     onChange={handleInputChange}
+                    size="small"
                   />
                   <FormLabel sx={{ color: 'black', mb: 2 }}>Volume (Kg/Ton)</FormLabel>
                   <TextField
@@ -520,35 +565,35 @@ export default function TambahAdminPage() {
                     name="totalVolumeAntarKota"
                     value={totalVolumeAntarKota}
                     onChange={(e) => handleChangeVolume(e, 'Number 4')}
+                    size="small"
                   />
                 </>
               )}
 
               <FormLabel sx={{ color: 'black', mb: 2 }}>Jumlah Muatan</FormLabel>
               <TextField
-                type="text"
+                type="number"
                 variant="outlined"
                 name="jml_in_out"
                 value={totalVolume} // Display the total volume
                 readOnly // Make the field read-only
                 sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                size="small"
               />
               <FormLabel sx={{ color: 'black', mb: 2 }}>Upload Surat Penunjukan Tally</FormLabel>
               <TextField
                 type="file"
                 variant="outlined"
-                name="surat"
-                multiple
+                name="filename"
                 onChange={handleFileChange}
                 sx={{ backgroundColor: '#fafafa', mb: 3 }}
+                size="small"
               />
               <Button variant="contained" type="submit" sx={{ mt: 2 }} color="success">
                 Submit
               </Button>
             </FormControl>
-            <ToastContainer />
           </form>
-          <ToastContainer />
         </Card>
       </Container>
     </>
