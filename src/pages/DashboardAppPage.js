@@ -5,18 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Modal, Typography, Button, Box } from '@mui/material';
+// import { useTheme } from '@mui/material/styles';
+import { Grid, Container, Typography, Box } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
-import { useJsApiLoader } from '@react-google-maps/api';
 import TabPanel from '@mui/lab/TabPanel';
 
 // components
 // sections
 import {
-  AppCurrentVisits,
   AppWebsiteVisits,
   AppWidgetSummary,
   SummaryTally,
@@ -27,8 +25,6 @@ import {
 } from '../sections/@dashboard/app';
 import { useAuth } from '../config/AuthContext';
 import useToken from '../config/useRequireAuth';
-import Maps from '../components/maps/Maps';
-import { mapOptions } from '../components/maps/MapConfiguration';
 import Geo from '../components/maps/Geo';
 
 // ----------------------------------------------------------------------
@@ -42,7 +38,7 @@ export default function DashboardAppPage() {
 
   const [count, setCount] = useState([]);
   const [bongkarMuat, setBongkarMuat] = useState([]);
-  const [Tally, setTally] = useState([]);
+  // const [Tally, setTally] = useState([]);
   const [Transportasi, setTransportasi] = useState([]);
   const [Pelabuhan, setPelabuhan] = useState([]);
   const [PPAL, setPPAL] = useState([]);
@@ -51,7 +47,6 @@ export default function DashboardAppPage() {
   const { checkAndLogin } = useToken();
   const navigateTo = useNavigate();
   const { token, login, logout } = useAuth();
-  const { tanggal, setTanggal } = useState([]);
 
   useEffect(() => {
     checkAndLogin();
@@ -172,35 +167,35 @@ export default function DashboardAppPage() {
     },
   ];
 
-  const theme = useTheme();
+  // const theme = useTheme();
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600, // Adjust the width as needed
-    height: 400, // Adjust the height as needed
-    bgcolor: 'white',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '8px',
-    textAlign: 'center',
-  };
+  // const modalStyle = {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: '50%',
+  //   transform: 'translate(-50%, -50%)',
+  //   width: 600, // Adjust the width as needed
+  //   height: 400, // Adjust the height as needed
+  //   bgcolor: 'white',
+  //   boxShadow: 24,
+  //   p: 4,
+  //   borderRadius: '8px',
+  //   textAlign: 'center',
+  // };
 
-  const buttonStyle = {
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#45a049',
-    },
-  };
+  // const buttonStyle = {
+  //   color: 'white',
+  //   '&:hover': {
+  //     backgroundColor: '#45a049',
+  //   },
+  // };
 
-  const linkStyle = {
-    display: 'block',
-    textDecoration: 'none',
-    color: '#1e88e5',
-    margin: '8px 0',
-  };
+  // const linkStyle = {
+  //   display: 'block',
+  //   textDecoration: 'none',
+  //   color: '#1e88e5',
+  //   margin: '8px 0',
+  // };
 
   const [open, setOpen] = React.useState(false);
 

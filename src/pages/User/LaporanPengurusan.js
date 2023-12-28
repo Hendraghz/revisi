@@ -155,9 +155,8 @@ export default function LaporanPagePengurusan() {
                     </td>
                     <td rowSpan={3}>Jenis Kegiatan</td>
                     <td rowSpan={3}>Muatan</td>
-                    <td colSpan={4}>Inklaring</td>
-                    <td colSpan={4}>Outklaring</td>
-                    <td rowSpan={3}>Jumlah Inklaring/Outklaring (KG/TON)</td>
+                    <td colSpan={10}>Muatan</td>
+                    <td rowSpan={3}>Jumlah Muatan (KG/TON)</td>
                     <td rowSpan={3}>Upload Surat Penunjukan (Shipper, Pemilik Barang/Tally Mandiri)</td>
                     <td rowSpan={3}>Action</td>
                   </tr>
@@ -166,25 +165,27 @@ export default function LaporanPagePengurusan() {
                       import
                     </td>
                     <td className="custom-width" colSpan={2}>
+                      Export
+                    </td>
+                    <td className="custom-width" colSpan={3}>
                       Antar Pulau
                     </td>
-                    <td className="custom-width" colSpan={2}>
-                      Import
-                    </td>
-                    <td className="custom-width" colSpan={2}>
-                      Antar Pulau
+                    <td className="custom-width" colSpan={3}>
+                      Antar Kota
                     </td>
                   </tr>
                   <tr>
                     <td className="custom">Nama Kapal/Pesawat</td>
                     <td className="custom">No Kendaraan</td>
-                    <td>Nomor PIB</td>
+                    <td>Asal Import</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PBB</td>
+                    <td>Tujuan Export</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PEB</td>
+                    <td>Asal</td>
+                    <td>Tujuan</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PMB</td>
+                    <td>Asal</td>
+                    <td>Tujuan</td>
                     <td>VOLUME (KG/TON)</td>
                   </tr>
                   <tr>
@@ -208,6 +209,8 @@ export default function LaporanPagePengurusan() {
                     <td>18</td>
                     <td>19</td>
                     <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -222,25 +225,31 @@ export default function LaporanPagePengurusan() {
                       <td>{row.no_kendaraan}</td>
                       <td>{row.jenis_kegiatan}</td>
                       <td>{row.muatan}</td>
-                      <td>{row.in_imp_pib}</td>
-                      <td>{row.in_imp_volume}</td>
-                      <td>{row.in_ap_pib}</td>
-                      <td>{row.in_ap_volume}</td>
-                      <td>{row.out_imp_pib}</td>
-                      <td>{row.out_imp_volume}</td>
-                      <td>{row.out_ap_pib}</td>
-                      <td>{row.out_ap_volume}</td>
-                      <td>{row.jml_in_out}</td>
+                      <td>{row.imp_asal}</td>
+                      <td>{row.imp_voulme}</td>
+                      <td>{row.exp_tujuan}</td>
+                      <td>{row.exp_voulme}</td>
+                      <td>{row.ap_asal}</td>
+                      <td>{row.ap_tujuan}</td>
+                      <td>{row.ap_voulme}</td>
+                      <td>{row.ak_asal}</td>
+                      <td>{row.ak_tujuan}</td>
+                      <td>{row.ak_voulme}</td>
+                      <td>{row.jml_muatan}</td>
                       <td>{row.surat}</td>
                       <td>
-                        <Link to={`/dashboard-user/edit-laporan-pengurusan-user/${row.id}`}>
-                          <Button variant="outlined" sx={{ mr: 1 }}>
-                            Ubah
-                          </Button>
-                        </Link>
-                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
-                          Hapus
-                        </Button>
+                        {row.status !== 'validated' && (
+                          <>
+                            <Link to={`/dashboard-user/edit-laporan-pengurusan-user/${row.id}`}>
+                              <Button variant="outlined" sx={{ mr: 1 }}>
+                                Ubah
+                              </Button>
+                            </Link>
+                            <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
+                              Hapus
+                            </Button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}

@@ -11,12 +11,13 @@ export default function Geo() {
 
   useEffect(() => {
     getKota();
-    console.log(kota);
   }, []);
+
   const getKota = async () => {
     const response = await axios.get('http://localhost:3001/kota');
     setKota(response.data.data);
   };
+
   return (
     <MapContainer center={center} zoom={8.5} style={{ width: '100vw', height: '100vh' }}>
       <TileLayer
@@ -61,7 +62,6 @@ export default function Geo() {
                   fillColor: '#27ae60',
                 });
               },
-              click: (e) => {},
             }}
           >
             <Tooltip direction="top" offset={[0, -8]} opacity={1} style={{ fontSize: '12px' }} permanent>

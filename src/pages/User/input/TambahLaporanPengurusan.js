@@ -58,17 +58,17 @@ export default function TambahAdminPage() {
     asal_antarpulau: '',
     muatan: '',
     imp_asal: '',
-    imp_voulme: '',
+    imp_voulme: 0,
     exp_tujuan: '',
-    exp_voulme: '',
+    exp_voulme: 0,
     ap_asal: '',
     ap_tujuan: '',
-    ap_voulme: '',
+    ap_voulme: 0,
     ak_asal: '',
     ak_tujuan: '',
-    ak_voulme: '',
-    jml_muatan: '',
-    filename: null,
+    ak_voulme: 0,
+    jml_muatan: 0,
+    surat: null,
   });
 
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function TambahAdminPage() {
     // Menangani perubahan input file
     setFormData({
       ...formData,
-      filename: e.target.files[0],
+      surat: e.target.files[0],
     });
   };
   const handleChangeRadio = (e) => {
@@ -178,43 +178,43 @@ export default function TambahAdminPage() {
         ...formData,
         asal_imp: '',
       });
-      setTotalVolumeImport('');
-      setTotalVolume('');
-      setTotalVolumeExport('');
-      setTotalVolumeAntarPulau('');
-      setTotalVolumeAntarKota('');
+      setTotalVolumeImport(0);
+      setTotalVolume(0);
+      setTotalVolumeExport(0);
+      setTotalVolumeAntarPulau(0);
+      setTotalVolumeAntarKota(0);
     } else if (value === 'ekspor') {
       setFormData({
         ...formData,
         tujuan_exp: '',
       });
-      setTotalVolumeExport('');
-      setTotalVolumeImport('');
-      setTotalVolumeAntarPulau('');
-      setTotalVolume('');
-      setTotalVolumeAntarKota('');
+      setTotalVolumeExport(0);
+      setTotalVolumeImport(0);
+      setTotalVolumeAntarPulau(0);
+      setTotalVolume(0);
+      setTotalVolumeAntarKota(0);
     } else if (value === 'antarPulau') {
       setFormData({
         ...formData,
         asal_antarpulau: '',
         tujuan_antarpulau: '',
       });
-      setTotalVolumeAntarPulau('');
-      setTotalVolumeImport('');
-      setTotalVolume('');
-      setTotalVolumeExport('');
-      setTotalVolumeAntarKota('');
+      setTotalVolumeAntarPulau(0);
+      setTotalVolumeImport(0);
+      setTotalVolume(0);
+      setTotalVolumeExport(0);
+      setTotalVolumeAntarKota(0);
     } else if (value === 'antarKota') {
       setFormData({
         ...formData,
         asal_antarkota: '',
         tujuan_antarkota: '',
       });
-      setTotalVolumeAntarKota('');
-      setTotalVolumeAntarPulau('');
-      setTotalVolumeImport('');
-      setTotalVolume('');
-      setTotalVolumeExport('');
+      setTotalVolumeAntarKota(0);
+      setTotalVolumeAntarPulau(0);
+      setTotalVolumeImport(0);
+      setTotalVolume(0);
+      setTotalVolumeExport(0);
     }
   };
 
@@ -245,6 +245,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('ak_tujuan', formData.ak_tujuan);
       formDataForApi.append('ak_voulme', totalVolumeAntarKota);
       formDataForApi.append('jml_muatan', totalVolume);
+      formDataForApi.append('surat', formData.surat);
 
       const response = await axios.post('http://localhost:3001/transportasi', formDataForApi, {
         headers: {
@@ -316,7 +317,6 @@ export default function TambahAdminPage() {
                   value={formData.nama_brg}
                   onChange={handleInputChange}
                   size="small"
-
                 />
                 <FormLabel sx={{ color: 'black', mb: 2 }}>Jenis Moda Transportasi</FormLabel>
                 <Select

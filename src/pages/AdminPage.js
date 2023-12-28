@@ -18,8 +18,6 @@ import {
   TableHead,
   TableContainer,
 } from '@mui/material';
-import refreshTokenInterceptor from '../config/axiosAuth';
-import refreshTokens from '../config/RefreshToken';
 // components
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
@@ -28,14 +26,6 @@ import { useAuth } from '../config/AuthContext';
 function createData(idAdmin, namaAdmin, emailAdmin, passwordAdmin) {
   return { idAdmin, namaAdmin, emailAdmin, passwordAdmin };
 }
-
-const rows = [
-  createData('ADM-029', 'Abdul Gopar', 'abdulgopar22@gmail.com', '*********'),
-  createData('ADM-022', 'Kurniawan', 'kurniawan1@gmail.com', '*********'),
-  createData('ADM-044', 'Agus Putra', 'aputra@gmail.com', '*********'),
-  createData('ADM-062', 'Muhammad Luthfi', 'mluthfi@gmail.com', '*********'),
-  createData('ADM-011', 'Somat', 'somat@gmail.com', '*********'),
-];
 
 export default function AdminPage() {
   const [admins, setAdmins] = useState([]);
@@ -70,10 +60,10 @@ export default function AdminPage() {
   const navigateAdd = () => {
     navigate('/dashboard/tambah-admin');
   };
-  const navigateEdit = (e) => {
-    e.preventDefault();
-    navigate('/dashboard/edit-admin');
-  };
+  // const navigateEdit = (e) => {
+  //   e.preventDefault();
+  //   navigate('/dashboard/edit-admin');
+  // };
 
   const handleDelete = async (id) => {
     try {
