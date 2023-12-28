@@ -68,7 +68,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('lokasi', formData.lokasi);
       formDataForApi.append('nomor', formData.nomor);
       formDataForApi.append('ukuran', formData.ukuran);
-      formDataForApi.append('status', formData.status);
+      formDataForApi.append('statuspk', formData.status);
       formDataForApi.append('posisi_row', formData.posisi_row);
       formDataForApi.append('posisi_tier', formData.posisi_tier);
       formDataForApi.append('kapasitas_depo', formData.kapasitas_depo);

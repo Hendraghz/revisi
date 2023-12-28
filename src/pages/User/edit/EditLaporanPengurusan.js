@@ -71,15 +71,17 @@ export default function EditLaporanPengurusan() {
     no_kendaraan: '',
     jenis_kegiatan: '',
     muatan: '',
-    in_imp_pib: '',
-    in_imp_volume: '',
-    in_ap_pib: '',
-    in_ap_volume: '',
-    out_imp_pib: '',
-    out_imp_volume: '',
-    out_ap_pib: '',
-    out_ap_volume: '',
-    jml_in_out: '',
+    imp_asal: '',
+    imp_voulme: 0,
+    exp_tujuan: '',
+    exp_voulme: 0,
+    ap_asal: '',
+    ap_tujuan: '',
+    ap_voulme: 0,
+    ak_asal: '',
+    ak_tujuan: '',
+    ak_voulme: 0,
+    jml_muatan: 0,
     surat: null,
   });
 
@@ -90,7 +92,6 @@ export default function EditLaporanPengurusan() {
           Authorization: `Bearer ${token}`,
         },
       });
-
       // Set the fetched data in the form state
       setFormData({
         tanggal: response.data.data.tanggal,
@@ -103,15 +104,7 @@ export default function EditLaporanPengurusan() {
         no_kendaraan: response.data.data.no_kendaraan,
         jenis_kegiatan: response.data.data.jenis_kegiatan,
         muatan: response.data.data.muatan,
-        in_imp_pib: response.data.data.in_imp_pib,
-        in_imp_volume: response.data.data.in_imp_volume,
-        in_ap_pib: response.data.data.in_ap_pib,
-        in_ap_volume: response.data.data.in_ap_volume,
-        out_imp_pib: response.data.data.out_imp_pib,
-        out_imp_volume: response.data.data.out_imp_volume,
-        out_ap_pib: response.data.data.out_ap_pib,
-        out_ap_volume: response.data.data.out_ap_volume,
-        jml_in_out: response.data.data.jml_in_out,
+        jml_muatan : response.data.data.muatan,
         surat: response.data.data.surat,
       });
     } catch (error) {
@@ -246,7 +239,7 @@ export default function EditLaporanPengurusan() {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigateTo('/dashboard-user');
+      navigateTo('/dashboard-user/laporan-user');
     } catch (error) {
       console.error('Error data:', error);
     }
@@ -261,7 +254,7 @@ export default function EditLaporanPengurusan() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Tambah Laporan Kegiatan Perusahaan Jasa Pengurusan Transportasi
+            Edit Laporan Kegiatan Perusahaan Jasa Pengurusan Transportasi
           </Typography>
         </Stack>
 

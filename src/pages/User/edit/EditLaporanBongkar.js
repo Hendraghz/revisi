@@ -157,7 +157,7 @@ export default function TambahAdminPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Tambah Laporan Kegiatan Perusahaan Bongkar Muat
+            Edit Laporan Kegiatan Perusahaan Bongkar Muat
           </Typography>
         </Stack>
 
@@ -269,9 +269,9 @@ export default function TambahAdminPage() {
                   labelId="select-jumlah-bongkar"
                   id="select-jumlah-bongkar"
                   label="jumlah-bongkar"
-                  value={formData.jml_bongkar}
+                  value={formData.jenis_bongkar}
                   onChange={handleInputChange}
-                  name="jml_bongkar"
+                  name="jenis_bongkar"
                   sx={{ mb: 3 }}
                   size="small"
                 >
@@ -285,9 +285,9 @@ export default function TambahAdminPage() {
                   labelId="select-jumlah-muat"
                   id="select-jumlah-muat"
                   label="jumlah-muat"
-                  value={formData.jml_muat}
+                  value={formData.jenis_muat}
                   onChange={handleInputChange}
-                  name="jml_muat"
+                  name="jenis_muat"
                   sx={{ mb: 3 }}
                   size="small"
                 >
@@ -303,9 +303,9 @@ export default function TambahAdminPage() {
                   variant="outlined"
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                  value={formData.jenis_bongkar}
+                  value={formData.jml_bongkar }
                   onChange={handleInputChange}
-                  name="jenis_bongkar"
+                  name="jml_bongkar"
                   size="small"
                 />
                 <FormLabel sx={{ color: 'black', mb: 2 }}>Jumlah Muat</FormLabel>
@@ -314,8 +314,8 @@ export default function TambahAdminPage() {
                   variant="outlined"
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                  name="jenis_muat"
-                  value={formData.jenis_muat}
+                  name="jml_muat"
+                  value={formData.jml_muat  }
                   onChange={handleInputChange}
                   size="small"
                 />

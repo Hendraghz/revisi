@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Stack, Typography, Button, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { Row, Table, Container } from 'react-bootstrap';
 import Iconify from '../../components/iconify';
-import '../../css/tableBongkar.css'; 
+import '../../css/tableBongkar.css';
 import useToken from '../../config/useRequireAuth';
 
 export default function LaporanPageBongkar() {
@@ -16,6 +16,8 @@ export default function LaporanPageBongkar() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const yearsArray = Array.from({ length: 22 }, (_, index) => 2013 + index);
+  const isMonthRequired = selectedYear !== '';
+  const isYearRequired = selectedMonth !== '';
 
   const handleChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -27,14 +29,20 @@ export default function LaporanPageBongkar() {
   useEffect(() => {
     checkAndLogin();
     getBm();
-  }, []);
+    if (selectedMonth !== '' && selectedYear !== '') {
+      getBm();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getBm = async () => {
-    const response = await axios.get('http://localhost:3001/bongkarMuat/show', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      `http://localhost:3001/bongkarMuat/show?month=${selectedMonth}&year=${selectedYear}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     setBm(response.data.data);
   };
   const handleDelete = async (id) => {
@@ -72,7 +80,7 @@ export default function LaporanPageBongkar() {
     const year = dateObject.getUTCFullYear();
     const month = (dateObject.getUTCMonth() + 1).toString().padStart(2, '0');
     const day = dateObject.getUTCDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}`;
   };
   return (
     <>
@@ -91,35 +99,36 @@ export default function LaporanPageBongkar() {
             </Button>
           </Link>
         </Stack>
-
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
-        <FormControl sx={{mb:2, minWidth: 180 }} size="small">
-        <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
-      <Select
-        labelId="demo-select-small-label"
-        id="demo-select-small"
-        value={selectedMonth}
-        label="Filter Bulan"
-        onChange={handleChange}
-      >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value="Januari">Januari</MenuItem>
-        <MenuItem value="Februari">Februari</MenuItem>
-        <MenuItem value="Maret">Maret</MenuItem>
-        <MenuItem value="April">April</MenuItem>
-        <MenuItem value="Mei">Mei</MenuItem>
-        <MenuItem value="Juni">Juni</MenuItem>
-        <MenuItem value="Juli">Juli</MenuItem>
-        <MenuItem value="Agustus">Agustus</MenuItem>
-        <MenuItem value="September">September</MenuItem>
-        <MenuItem value="Oktober">Oktober</MenuItem>
-        <MenuItem value="November">November</MenuItem>
-        <MenuItem value="November">November</MenuItem>
-      </Select>
-      </FormControl>
-      <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+            <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={selectedMonth}
+              label="Filter Bulan"
+              onChange={handleChange}
+              required={isYearRequired}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="01">Januari</MenuItem>
+              <MenuItem value="02">Februari</MenuItem>
+              <MenuItem value="03">Maret</MenuItem>
+              <MenuItem value="04">April</MenuItem>
+              <MenuItem value="05">Mei</MenuItem>
+              <MenuItem value="06">Juni</MenuItem>
+              <MenuItem value="07">Juli</MenuItem>
+              <MenuItem value="08">Agustus</MenuItem>
+              <MenuItem value="09">September</MenuItem>
+              <MenuItem value="10">Oktober</MenuItem>
+              <MenuItem value="11">November</MenuItem>
+              <MenuItem value="12">Desember</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
             <InputLabel id="filter-year-label">Filter Tahun</InputLabel>
             <Select
               labelId="filter-year-label"
@@ -127,6 +136,7 @@ export default function LaporanPageBongkar() {
               value={selectedYear}
               label="Filter Tahun"
               onChange={handleYearChange}
+              required={isMonthRequired}
             >
               <MenuItem value="">
                 <em>None</em>

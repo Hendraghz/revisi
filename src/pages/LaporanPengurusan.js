@@ -5,13 +5,25 @@ import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import { Row, Container, Table } from 'react-bootstrap';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
 
 export default function LaporanPage() {
   const [transportasi, setTransportasi] = useState([]);
   const { token, checkAndLogin } = useToken();
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const yearsArray = Array.from({ length: 22 }, (_, index) => 2013 + index);
+
+  const handleChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
+
   useEffect(() => {
     checkAndLogin();
     getTransportasi();
@@ -105,8 +117,53 @@ export default function LaporanPage() {
             </Button>
           </Link> */}
         </Stack>
-
+          <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+            <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={selectedMonth}
+              label="Filter Bulan"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="01">Januari</MenuItem>
+              <MenuItem value="02">Februari</MenuItem>
+              <MenuItem value="03">Maret</MenuItem>
+              <MenuItem value="04">April</MenuItem>
+              <MenuItem value="05">Mei</MenuItem>
+              <MenuItem value="06">Juni</MenuItem>
+              <MenuItem value="07">Juli</MenuItem>
+              <MenuItem value="08">Agustus</MenuItem>
+              <MenuItem value="09">September</MenuItem>
+              <MenuItem value="10">Oktober</MenuItem>
+              <MenuItem value="11">November</MenuItem>
+              <MenuItem value="12">Desember</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
+            <InputLabel id="filter-year-label">Filter Tahun</InputLabel>
+            <Select
+              labelId="filter-year-label"
+              id="filter-year"
+              value={selectedYear}
+              label="Filter Tahun"
+              onChange={handleYearChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {yearsArray.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <div className="custom-lebar">
             <Row className="px-4 tab">
               <Table className="tables">
@@ -122,9 +179,8 @@ export default function LaporanPage() {
                     </td>
                     <td rowSpan={3}>Jenis Kegiatan</td>
                     <td rowSpan={3}>Muatan</td>
-                    <td colSpan={4}>Inklaring</td>
-                    <td colSpan={4}>Outklaring</td>
-                    <td rowSpan={3}>Jumlah Inklaring/Outklaring (KG/TON)</td>
+                    <td colSpan={10}>Muatan</td>
+                    <td rowSpan={3}>Jumlah Muatan (KG/TON)</td>
                     <td rowSpan={3}>Upload Surat Penunjukan (Shipper, Pemilik Barang/Tally Mandiri)</td>
                     <td rowSpan={3}>Action</td>
                   </tr>
@@ -133,25 +189,27 @@ export default function LaporanPage() {
                       import
                     </td>
                     <td className="custom-width" colSpan={2}>
+                      Export
+                    </td>
+                    <td className="custom-width" colSpan={3}>
                       Antar Pulau
                     </td>
-                    <td className="custom-width" colSpan={2}>
-                      Import
-                    </td>
-                    <td className="custom-width" colSpan={2}>
-                      Antar Pulau
+                    <td className="custom-width" colSpan={3}>
+                      Antar Kota
                     </td>
                   </tr>
                   <tr>
                     <td className="custom">Nama Kapal/Pesawat</td>
                     <td className="custom">No Kendaraan</td>
-                    <td>Nomor PIB</td>
+                    <td>Asal Import</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PIB</td>
+                    <td>Tujuan Export</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PIB</td>
+                    <td>Asal</td>
+                    <td>Tujuan</td>
                     <td>VOLUME (KG/TON)</td>
-                    <td>Nomor PIB</td>
+                    <td>Asal</td>
+                    <td>Tujuan</td>
                     <td>VOLUME (KG/TON)</td>
                   </tr>
                   <tr>
@@ -175,6 +233,8 @@ export default function LaporanPage() {
                     <td>18</td>
                     <td>19</td>
                     <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,20 +249,31 @@ export default function LaporanPage() {
                       <td>{row.no_kendaraan}</td>
                       <td>{row.jenis_kegiatan}</td>
                       <td>{row.muatan}</td>
-                      <td>{row.in_imp_pib}</td>
-                      <td>{row.in_imp_volume}</td>
-                      <td>{row.in_ap_pib}</td>
-                      <td>{row.in_ap_volume}</td>
-                      <td>{row.out_imp_pib}</td>
-                      <td>{row.out_imp_volume}</td>
-                      <td>{row.out_ap_pib}</td>
-                      <td>{row.out_ap_volume}</td>
-                      <td>{row.jml_in_out}</td>
+                      <td>{row.imp_asal}</td>
+                      <td>{row.imp_voulme}</td>
+                      <td>{row.exp_tujuan}</td>
+                      <td>{row.exp_voulme}</td>
+                      <td>{row.ap_asal}</td>
+                      <td>{row.ap_tujuan}</td>
+                      <td>{row.ap_voulme}</td>
+                      <td>{row.ak_asal}</td>
+                      <td>{row.ak_tujuan}</td>
+                      <td>{row.ak_voulme}</td>
+                      <td>{row.jml_muatan}</td>
                       <td>{row.surat}</td>
                       <td>
-                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
-                          Hapus
-                        </Button>
+                        {row.status !== 'validated' && (
+                          <>
+                            <Link to={`/dashboard-user/edit-laporan-pengurusan-user/${row.id}`}>
+                              <Button variant="outlined" sx={{ mr: 1 }}>
+                                Ubah
+                              </Button>
+                            </Link>
+                            <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
+                              Hapus
+                            </Button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}

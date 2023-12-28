@@ -26,14 +26,20 @@ export default function LaporanPageAngkutan() {
   useEffect(() => {
     checkAndLogin();
     getPelabuhan();
-  }, []);
+    if (selectedMonth !== '' && selectedYear !== '') {
+      getPelabuhan();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getPelabuhan = async () => {
-    const response = await axios.get('http://localhost:3001/pelabuhan/show', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      `http://localhost:3001/pelabuhan/show?month=${selectedMonth}&year=${selectedYear}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     setPelabuhan(response.data.data);
   };
   const handleDelete = async (id) => {
@@ -114,7 +120,7 @@ export default function LaporanPageAngkutan() {
             </Button>
           </Link>
         </Stack>
-
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
           <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
@@ -128,18 +134,18 @@ export default function LaporanPageAngkutan() {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="Januari">Januari</MenuItem>
-              <MenuItem value="Februari">Februari</MenuItem>
-              <MenuItem value="Maret">Maret</MenuItem>
-              <MenuItem value="April">April</MenuItem>
-              <MenuItem value="Mei">Mei</MenuItem>
-              <MenuItem value="Juni">Juni</MenuItem>
-              <MenuItem value="Juli">Juli</MenuItem>
-              <MenuItem value="Agustus">Agustus</MenuItem>
-              <MenuItem value="September">September</MenuItem>
-              <MenuItem value="Oktober">Oktober</MenuItem>
-              <MenuItem value="November">November</MenuItem>
-              <MenuItem value="November">November</MenuItem>
+              <MenuItem value="01">Januari</MenuItem>
+              <MenuItem value="02">Februari</MenuItem>
+              <MenuItem value="03">Maret</MenuItem>
+              <MenuItem value="04">April</MenuItem>
+              <MenuItem value="05">Mei</MenuItem>
+              <MenuItem value="06">Juni</MenuItem>
+              <MenuItem value="07">Juli</MenuItem>
+              <MenuItem value="08">Agustus</MenuItem>
+              <MenuItem value="09">September</MenuItem>
+              <MenuItem value="10">Oktober</MenuItem>
+              <MenuItem value="11">November</MenuItem>
+              <MenuItem value="12">Desember</MenuItem>
             </Select>
           </FormControl>
           <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">

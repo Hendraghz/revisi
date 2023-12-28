@@ -24,6 +24,7 @@ export default function EditLaporanPenyewa() {
   }, []);
 
   const [formData, setFormData] = useState({
+    tanggal : '',
     email,
     nama_perusahaan: '',
     penyewaan_peralatan: '',
@@ -48,6 +49,7 @@ export default function EditLaporanPenyewa() {
 
       // Set the fetched data in the form state
       setFormData({
+        tanggal : response.data.data.tanggal,
         email: response.data.data.email,
         nama_perusahaan: response.data.data.nama_perusahaan,
         penyewaan_peralatan: response.data.data.penyewaan_peralatan,
@@ -86,6 +88,7 @@ export default function EditLaporanPenyewa() {
 
     try {
       const formDataForApi = new FormData();
+      formDataForApi.append('tanggal', formData.tanggal);
       formDataForApi.append('email', formData.email);
       formDataForApi.append('nama_perusahaan', formData.nama_perusahaan);
       formDataForApi.append('penyewaan_peralatan', formData.penyewaan_peralatan);
@@ -112,10 +115,10 @@ export default function EditLaporanPenyewa() {
         icon: 'success',
         title: 'Data Edited Diubah',
         confirmButtonText: 'OK',
-        showConfirmButton: false,
+        showConfirmButton: true,
         timer: 1500,
       });
-      navigateTo('/dashboard-user');
+      navigateTo('/dashboard-user/laporan-user');
     } catch (error) {
       console.error('Error data:', error);
     }
@@ -130,34 +133,44 @@ export default function EditLaporanPenyewa() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Ubah Laporan Penyewaan Angkutan Laut
+            Edit Laporan Penyewaan Angkutan Laut
           </Typography>
         </Stack>
 
         <Card>
           <form onSubmit={handleFormSubmit}>
             <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 530 }}>
-              <FormLabel sx={{ color: 'black' }}>Nama Perusahaan/Perorangan</FormLabel>
+            <FormLabel sx={{ color: 'black', mb:2 }}>Tanggal</FormLabel>
+              <TextField
+                type="date"
+                variant="outlined"
+                placeholder=""
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                name="tanggal"
+                value={formData.tanggal}
+                onChange={handleInputChange}
+              />
+              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Perusahaan/Perorangan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 name="nama_perusahaan"
                 value={formData.nama_perusahaan}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black' }}>Penyewa Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Penyewa Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 value={formData.penyewaan_peralatan}
                 onChange={handleInputChange}
                 name="penyewaan_peralatan"
               />
-              <FormLabel sx={{ color: 'black' }}>Kegiatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Kegiatan</FormLabel>
               <Select
                 labelId="select-kegiatan"
                 id="select-kegiatan"
@@ -165,6 +178,7 @@ export default function EditLaporanPenyewa() {
                 name="kegiatan"
                 onChange={handleInputChange}
                 label="Kegiatan"
+                sx={{mb:3}}
               >
                 <MenuItem value={'angkutan laut'}>Angkutan Laut</MenuItem>
                 <MenuItem value={'bongkar muat'}>Bongkar Muat</MenuItem>
@@ -174,7 +188,7 @@ export default function EditLaporanPenyewa() {
                 <MenuItem value={'perbaikan kapal'}>Perbaikan dan Pemeliharaan Kapal</MenuItem>
               </Select>
               <h3>Peralatan Angkutan Laut</h3>
-              <FormLabel sx={{ color: 'black' }}>Nama Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black' , mb:2}}>Nama Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -182,9 +196,9 @@ export default function EditLaporanPenyewa() {
                 value={formData.nama_peralatanAL}
                 name="nama_peralatanAL"
                 onChange={handleInputChange}
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Jumlah Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Jumlah Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -192,10 +206,10 @@ export default function EditLaporanPenyewa() {
                 value={formData.jumlah_satuanAL}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
               <h3>Peralatan Jasa Terkait</h3>
-              <FormLabel sx={{ color: 'black' }}>Nama Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -203,9 +217,9 @@ export default function EditLaporanPenyewa() {
                 name="nama_peralatanJT"
                 value={formData.nama_peralatanJT}
                 onChange={handleInputChange}
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Jumlah Peralatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Jumlah Peralatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -213,9 +227,9 @@ export default function EditLaporanPenyewa() {
                 value={formData.jumlah_satuanJT}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Masa Sewa (Hari)</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Masa Sewa (Hari)</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
@@ -223,10 +237,10 @@ export default function EditLaporanPenyewa() {
                 name="masa_sewa"
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
               <h3>Jangka Waktu (Tgl/Bulan/Tahun)</h3>
-              <FormLabel sx={{ color: 'black' }}>Mulai</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Mulai</FormLabel>
               <TextField
                 type="date"
                 variant="outlined"
@@ -234,9 +248,9 @@ export default function EditLaporanPenyewa() {
                 value={formData.jw_mulai}
                 onChange={handleInputChange}
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Selesai</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Selesai</FormLabel>
               <TextField
                 type="date"
                 name="jw_selesai"
@@ -244,14 +258,15 @@ export default function EditLaporanPenyewa() {
                 onChange={handleInputChange}
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
               />
-              <FormLabel sx={{ color: 'black' }}>Upload Surat Penunjukan Perjanjian Sewa/Purchase Order</FormLabel>
+              <FormLabel sx={{ color: 'black', mb:2 }}>Upload Surat Penunjukan Perjanjian Sewa/Purchase Order</FormLabel>
               <TextField
                 type="file"
                 variant="outlined"
-                sx={{ backgroundColor: '#fafafa' }}
+                sx={{ backgroundColor: '#fafafa', mb:3 }}
                 name="surat"
+                multiple
                 onChange={handleFileChange}
               />
               <Button variant="contained" type="submit" sx={{ mt: 2 }} color="success">
