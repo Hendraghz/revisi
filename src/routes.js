@@ -44,7 +44,6 @@ import InputLaporanPenyewaanUser from './pages/User/input/TambahLaporanPenyewaan
 import InputLaporanTallyUser from './pages/User/input/TambahLaporanTally';
 import Profile from './pages/User/Profile';
 
-
 import EditLaporanAngkutan from './pages/User/edit/EditLaporanAngkutan';
 import EditLaporanBongkar from './pages/User/edit/EditLaporanBongkar';
 import EditLaporanDepo from './pages/User/edit/EditLaporanDepo';
@@ -77,7 +76,7 @@ export default function Router() {
         { path: 'tambah-admin', element: <TambahAdminPage /> },
         { path: 'edit-admin/:id', element: <EditAdminPage /> },
         { path: 'tambah-perusahaan', element: <TambahPerusahaanPage /> },
-        { path: 'detail-perusahaan', element: <DetailPerusahaan/>},
+        { path: 'detail-perusahaan/:id', element: <DetailPerusahaan /> },
         { path: 'edit-perusahaan/:id', element: <EditPerusahaanPage /> },
         { path: 'tambah-notifikasi', element: <TambahNotifikasiPage /> },
         { path: 'edit-notifikasi', element: <EditNotifikasiPage /> },
@@ -102,7 +101,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard-user/app" />, index: true },
         { path: 'app', element: <DashboardUser /> },
-        { path: 'profile-user', element: <Profile/>},
+        { path: 'profile-user', element: <Profile /> },
         { path: 'laporan-user', element: <LaporanUser /> },
         { path: 'tambah-laporan-bongkar-user', element: <InputLaporanBongkarUser /> },
         { path: 'tambah-laporan-depo-user', element: <InputLaporanDepoUser /> },
@@ -111,12 +110,11 @@ export default function Router() {
         { path: 'tambah-laporan-tally-user', element: <InputLaporanTallyUser /> },
         { path: 'tambah-laporan-penyewaan-user', element: <InputLaporanPenyewaanUser /> },
         { path: 'edit-laporan-bongkar-user/:id', element: <EditLaporanBongkar /> },
-        { path: 'edit-laporan-depo-user/:id', element: <EditLaporanDepo/>},
-        { path: 'edit-laporan-angkutan-user/:id', element: <EditLaporanAngkutan/>},
-        { path: 'edit-laporan-pengurusan-user/:id', element: <EditLaporanPengurusan/>},
-        { path: 'edit-laporan-tally-user/:id', element: <EditLaporanTally/>},
-        { path: 'edit-laporan-penyewaan-user/:id', element: <EditLaporanPenyewa/>}
-        
+        { path: 'edit-laporan-depo-user/:id', element: <EditLaporanDepo /> },
+        { path: 'edit-laporan-angkutan-user/:id', element: <EditLaporanAngkutan /> },
+        { path: 'edit-laporan-pengurusan-user/:id', element: <EditLaporanPengurusan /> },
+        { path: 'edit-laporan-tally-user/:id', element: <EditLaporanTally /> },
+        { path: 'edit-laporan-penyewaan-user/:id', element: <EditLaporanPenyewa /> },
       ],
     },
 

@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 // @mui
 import { Button, Container, Stack, Typography, Card } from '@mui/material';
@@ -58,6 +59,37 @@ export default function PerusahaanPage() {
       console.error('Error:', error);
     }
   };
+  const handleExport = async () => {
+    try {
+      // Send a DELETE request to your API endpoint using fetch
+      const response = await axios.get('http://localhost:3001/downloadPerusahaan', {
+        responseType: 'arraybuffer',
+      });
+
+      // Create a blob from the response data
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'pelabuhan.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Handle successful response
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Data Exported Successfully',
+        confirmButtonText: 'OK',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
   return (
     <>
       <Helmet>
@@ -104,7 +136,7 @@ export default function PerusahaanPage() {
                       <Button onClick={() => handleDelete(perusahaanRow.id)} variant="outlined" color="error">
                         Hapus
                       </Button>
-                      <Link to={'/dashboard/detail-perusahaan'}>
+                      <Link to={`/dashboard/detail-perusahaan/${perusahaanRow.id}`}>
                         <Button variant="outlined" sx={{ ml: 1 }}>
                           Detail
                         </Button>
@@ -117,7 +149,12 @@ export default function PerusahaanPage() {
           </TableContainer>
         </Card>
         <div className="print-button">
-          <Button variant="contained" className="btnDownload" startIcon={<Iconify icon="file-icons:microsoft-excel" />}>
+          <Button
+            variant="contained"
+            className="btnDownload"
+            onClick={handleExport}
+            startIcon={<Iconify icon="file-icons:microsoft-excel" />}
+          >
             Download Excel
           </Button>
         </div>

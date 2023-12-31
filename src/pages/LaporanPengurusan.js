@@ -27,10 +27,13 @@ export default function LaporanPage() {
   useEffect(() => {
     checkAndLogin();
     getTransportasi();
-  }, []);
+    if (selectedMonth !== '' && selectedYear !== '') {
+      getTransportasi();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getTransportasi = async () => {
-    const response = await axios.get('http://localhost:3001/transportasi', {
+    const response = await axios.get(`http://localhost:3001/transportasi?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -100,6 +103,37 @@ export default function LaporanPage() {
       console.error('Error deleting data:', error);
     }
   };
+
+  const handleValid = async (id) => {
+    try {
+      // Send a DELETE request to your API endpoint using fetch
+      const response = await fetch(`http://localhost:3001/transportasi/${id}/valid`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        // Handle error response
+        console.error('Error Validasi data:', response.statusText);
+        return;
+      }
+
+      // Handle successful response
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Data validated Successfully',
+        confirmButtonText: 'OK',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      getTransportasi();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
   return (
     <>
       <Helmet>
@@ -117,7 +151,7 @@ export default function LaporanPage() {
             </Button>
           </Link> */}
         </Stack>
-          <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
           <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
@@ -260,15 +294,21 @@ export default function LaporanPage() {
                       <td>{row.ak_tujuan}</td>
                       <td>{row.ak_voulme}</td>
                       <td>{row.jml_muatan}</td>
-                      <td>{row.surat}</td>
+                      <td>
+                        <Link
+                          to={`http://localhost:3001/dokumen/${row.surat}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.surat}
+                        </Link>
+                      </td>
                       <td>
                         {row.status !== 'validated' && (
                           <>
-                            <Link to={`/dashboard-user/edit-laporan-pengurusan-user/${row.id}`}>
-                              <Button variant="outlined" sx={{ mr: 1 }}>
-                                Ubah
-                              </Button>
-                            </Link>
+                            <Button onClick={() => handleValid(row.id)} variant="outlined" sx={{ mr: 1 }}>
+                              Validasi
+                            </Button>
                             <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
                               Hapus
                             </Button>
