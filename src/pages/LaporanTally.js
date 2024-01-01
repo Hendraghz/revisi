@@ -5,20 +5,34 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { Container, Row, Table } from 'react-bootstrap';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
 
 export default function LaporanPage() {
   const [tally, setTally] = useState([]);
   const { token, checkAndLogin } = useToken();
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const yearsArray = Array.from({ length: 22 }, (_, index) => 2013 + index);
+
+  const handleChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
   useEffect(() => {
     checkAndLogin();
     getTally();
-  }, []);
+    if (selectedMonth !== '' && selectedYear !== '') {
+      getTally();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getTally = async () => {
-    const response = await axios.get('http://localhost:3001/tally', {
+    const response = await axios.get(`http://localhost:3001/tally?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -89,6 +103,37 @@ export default function LaporanPage() {
     }
   };
 
+  const handleValid = async (id) => {
+    try {
+      // Send a DELETE request to your API endpoint using fetch
+      const response = await fetch(`http://localhost:3001/tally/${id}/valid`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        // Handle error response
+        console.error('Error Validasi data:', response.statusText);
+        return;
+      }
+
+      // Handle successful response
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Data validated Successfully',
+        confirmButtonText: 'OK',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      getTally();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -106,9 +151,55 @@ export default function LaporanPage() {
                         </Button>
                     </Link> */}
         </Stack>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
 
         <Container fluid>
           <div className="custom-lebar">
+            <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+              <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={selectedMonth}
+                label="Filter Bulan"
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="01">Januari</MenuItem>
+                <MenuItem value="02">Februari</MenuItem>
+                <MenuItem value="03">Maret</MenuItem>
+                <MenuItem value="04">April</MenuItem>
+                <MenuItem value="05">Mei</MenuItem>
+                <MenuItem value="06">Juni</MenuItem>
+                <MenuItem value="07">Juli</MenuItem>
+                <MenuItem value="08">Agustus</MenuItem>
+                <MenuItem value="09">September</MenuItem>
+                <MenuItem value="10">Oktober</MenuItem>
+                <MenuItem value="11">November</MenuItem>
+                <MenuItem value="12">Desember</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
+              <InputLabel id="filter-year-label">Filter Tahun</InputLabel>
+              <Select
+                labelId="filter-year-label"
+                id="filter-year"
+                value={selectedYear}
+                label="Filter Tahun"
+                onChange={handleYearChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {yearsArray.map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Row className="px-4 tab">
               <Table className="tables" Striped bordered hover>
                 <thead>
@@ -183,11 +274,26 @@ export default function LaporanPage() {
                       <td>{row.selesai_muat}</td>
                       <td>{row.lokasi_kegiatan}</td>
                       <td>{row.muatan}</td>
-                      <td>{row.upload_surat_penunjukan}</td>
                       <td>
-                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
-                          Hapus
-                        </Button>
+                        <Link
+                          to={`http://localhost:3001/dokumen/${row.upload_surat_penunjukan}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.upload_surat_penunjukan}
+                        </Link>
+                      </td>
+                      <td>
+                        {row.status !== 'validated' && (
+                          <>
+                            <Button onClick={() => handleValid(row.id)} variant="outlined" sx={{ mr: 1 }}>
+                              Validasi
+                            </Button>
+                            <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
+                              Hapus
+                            </Button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}

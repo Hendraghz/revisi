@@ -9,14 +9,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useToken from '../../config/useRequireAuth';
 
-
-
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 export default function Profile() {
   const [nama, setNama] = useState('');
+  const [perusahaan, setPerusahaan] = useState([]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
@@ -26,9 +25,18 @@ export default function Profile() {
   const { token, checkAndLogin } = useToken();
   useEffect(() => {
     checkAndLogin();
+    getPerusahaan();
+    console.log(perusahaan);
   }, []);
 
-  
+  const getPerusahaan = async () => {
+    const response = await axios.get('http://localhost:3001/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setPerusahaan(response.data.data);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -64,20 +72,10 @@ export default function Profile() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Profile User
+            Profile User {perusahaan.nama_perusahaan}
           </Typography>
         </Stack>
         <Card>
-          <Stack alignItems="center" justifyContent="center" sx={{ mb: 5, mt: 2 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 160, height: 160 }} />
-            <TextField
-                type="file"
-                variant="outlined"
-                name="profile"
-                sx={{ backgroundColor: '#fafafa', mb: 3, mt:2 }}
-                size="sm"
-              />
-          </Stack>
           <form onSubmit={submitHandler}>
             <Stack direction="row" spacing={2} sx={{ ml: 5, mt: 3, mb: 3, mr: 5 }}>
               <FormControl sx={{ width: 530 }}>
@@ -85,7 +83,7 @@ export default function Profile() {
                 <TextField
                   type="text"
                   variant="outlined"
-                  placeholder="PT Example"
+                  placeholder={perusahaan.nama_perusahaan}
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
                   onChange={(e) => setNama(e.target.value)}
                 />
@@ -231,8 +229,10 @@ export default function Profile() {
                 />
               </FormControl>
             </Stack>
-            <Box textAlign='center'>
-            <Button type="submit" variant="contained" color="primary" sx={{mt:3, mb:3}}>Simpan Profile</Button>
+            <Box textAlign="center">
+              <Button type="submit" variant="contained" color="primary" sx={{ mt: 3, mb: 3 }}>
+                Simpan Profile
+              </Button>
             </Box>
           </form>
         </Card>

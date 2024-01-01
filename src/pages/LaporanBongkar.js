@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
 import { Row, Table, Container } from 'react-bootstrap';
 import Iconify from '../components/iconify';
@@ -13,13 +13,27 @@ import useToken from '../config/useRequireAuth';
 export default function LaporanPage() {
   const [bm, setBm] = useState([]);
   const { token, checkAndLogin } = useToken();
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const yearsArray = Array.from({ length: 22 }, (_, index) => 2013 + index);
+
+  const handleChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
   useEffect(() => {
     checkAndLogin();
     getBm();
-  }, []);
+    if (selectedMonth !== '' && selectedYear !== '') {
+      getBm();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getBm = async () => {
-    const response = await axios.get('http://localhost:3001/bongkarMuat', {
+    const response = await axios.get(`http://localhost:3001/bongkarMuat?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -89,6 +103,38 @@ export default function LaporanPage() {
       console.error('Error deleting data:', error);
     }
   };
+
+  const handleValid = async (id) => {
+    try {
+      // Send a DELETE request to your API endpoint using fetch
+      const response = await fetch(`http://localhost:3001/bongkarMuat/${id}/valid`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        // Handle error response
+        console.error('Error Validasi data:', response.statusText);
+        return;
+      }
+
+      // Handle successful response
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Data validated Successfully',
+        confirmButtonText: 'OK',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      getBm();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -106,9 +152,54 @@ export default function LaporanPage() {
             </Button>
           </Link> */}
         </Stack>
-
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
           <div className="custom-lebar">
+            <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+              <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={selectedMonth}
+                label="Filter Bulan"
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="01">Januari</MenuItem>
+                <MenuItem value="02">Februari</MenuItem>
+                <MenuItem value="03">Maret</MenuItem>
+                <MenuItem value="04">April</MenuItem>
+                <MenuItem value="05">Mei</MenuItem>
+                <MenuItem value="06">Juni</MenuItem>
+                <MenuItem value="07">Juli</MenuItem>
+                <MenuItem value="08">Agustus</MenuItem>
+                <MenuItem value="09">September</MenuItem>
+                <MenuItem value="10">Oktober</MenuItem>
+                <MenuItem value="11">November</MenuItem>
+                <MenuItem value="12">Desember</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ mb: 2, ml: 2, minWidth: 180 }} size="small">
+              <InputLabel id="filter-year-label">Filter Tahun</InputLabel>
+              <Select
+                labelId="filter-year-label"
+                id="filter-year"
+                value={selectedYear}
+                label="Filter Tahun"
+                onChange={handleYearChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {yearsArray.map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Row className="px-4 tab">
               <Table className="tables">
                 <thead>
@@ -128,7 +219,6 @@ export default function LaporanPage() {
                     <td rowSpan={3}>Pelabuhan Muat</td>
                     <td rowSpan={3}>Tujuan</td>
                     <td rowSpan={3}>Penunjukan PBM</td>
-                    <td rowSpan={3}>Upload Surat Penunjukan</td>
                     <td rowSpan={3}>Upload Surat Penunjukan TALLY</td>
                     <td rowSpan={3}>Action</td>
                   </tr>
@@ -179,7 +269,6 @@ export default function LaporanPage() {
                     <td>20</td>
                     <td>21</td>
                     <td>22</td>
-                    <td>23</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -204,16 +293,35 @@ export default function LaporanPage() {
                       <td>{row.jml_buruh}</td>
                       <td>{row.pelabuhan_muat}</td>
                       <td>{row.tujuan}</td>
-                      <td>{row.pdok_pbm}</td>
-                      <td>{row.surat_penunjukan}</td>
-                      <td>{row.surat_penunjukan_tally}</td>
                       <td>
-                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
-                          Hapus
-                        </Button>
-                        <Button onClick={() => handleDelete(row.id)} variant="outlined" color="primary">
-                          Validasi
-                        </Button>
+                        <Link
+                          to={`http://localhost:3001/dokumen/${row.pdok_pbm}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.pdok_pbm}
+                        </Link>
+                      </td>
+                      <td>
+                        <Link
+                          to={`http://localhost:3001/dokumen/${row.surat_penunjukan_tally}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.surat_penunjukan_tally}
+                        </Link>
+                      </td>
+                      <td>
+                        {row.status !== 'validated' && (
+                          <>
+                            <Button onClick={() => handleValid(row.id)} variant="outlined" sx={{ mr: 1 }}>
+                              Validasi
+                            </Button>
+                            <Button onClick={() => handleDelete(row.id)} variant="outlined" color="error">
+                              Hapus
+                            </Button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}
