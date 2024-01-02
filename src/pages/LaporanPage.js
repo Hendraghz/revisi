@@ -7,6 +7,7 @@ import { Grid, Container, Stack, Typography } from '@mui/material';
 
 import { AppWidgetSummary } from '../sections/@dashboard/app';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [count, setCount] = useState([]);
@@ -17,7 +18,7 @@ export default function LaporanPage() {
   }, []);
 
   const getCount = async () => {
-    const response = await axios.get('http://localhost:3001/count', {
+    const response = await axios.get(`${baseURL}/count`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

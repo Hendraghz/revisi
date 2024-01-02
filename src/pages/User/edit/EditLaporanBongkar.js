@@ -11,6 +11,7 @@ import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Sel
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../../../config/useRequireAuth';
+import baseURL from '../../../config/url';
 
 export default function TambahAdminPage() {
   const navigateTo = useNavigate();
@@ -30,8 +31,8 @@ export default function TambahAdminPage() {
 
   const [formData, setFormData] = useState({
     // eslint-disable-next-line object-shorthand
-    tanggal:'',
-     // eslint-disable-next-line object-shorthand
+    tanggal: '',
+    // eslint-disable-next-line object-shorthand
     email: email,
     nama_perusahaan: '',
     kegiatan: '',
@@ -56,7 +57,7 @@ export default function TambahAdminPage() {
 
   const getBongkarMuat = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/bongkarMuat/${id}/show`, {
+      const response = await axios.get(`${baseURL}/bongkarMuat/${id}/show`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +65,7 @@ export default function TambahAdminPage() {
 
       // Set the form data with the response data
       setFormData({
-        tanggal : response.data.data.tanggal,
+        tanggal: response.data.data.tanggal,
         email: response.data.data.email,
         nama_perusahaan: response.data.data.nama_perusahaan,
         kegiatan: response.data.data.kegiatan,
@@ -127,7 +128,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('pdok_pbm', pdokPbm);
       formDataForApi.append('surat_penunjukan_tally', suratPenunjukanTally);
 
-      const response = await axios.put(`http://localhost:3001/bongkarMuat/${id}/update`, formDataForApi, {
+      const response = await axios.put(`${baseURL}/bongkarMuat/${id}/update`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
@@ -303,7 +304,7 @@ export default function TambahAdminPage() {
                   variant="outlined"
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                  value={formData.jml_bongkar }
+                  value={formData.jml_bongkar}
                   onChange={handleInputChange}
                   name="jml_bongkar"
                   size="small"
@@ -315,7 +316,7 @@ export default function TambahAdminPage() {
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
                   name="jml_muat"
-                  value={formData.jml_muat  }
+                  value={formData.jml_muat}
                   onChange={handleInputChange}
                   size="small"
                 />
@@ -413,9 +414,14 @@ export default function TambahAdminPage() {
                 />
               </FormControl>
             </Stack>
-              <Button variant="contained" type="submit" sx={{ mt: 2, mb:3, ml:5 , height:40, width:120 }} color="success">
-                Submit
-              </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ mt: 2, mb: 3, ml: 5, height: 40, width: 120 }}
+              color="success"
+            >
+              Submit
+            </Button>
           </form>
         </Card>
       </Container>

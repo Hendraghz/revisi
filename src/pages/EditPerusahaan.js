@@ -8,6 +8,7 @@ import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Sel
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +31,7 @@ export default function EditPerusahaanPage() {
     getPerusahaan();
   }, []);
   const getPerusahaan = async () => {
-    const response = await axios.get(`http://localhost:3001/admin/users/${id}`, {
+    const response = await axios.get(`${baseURL}/admin/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,7 +47,7 @@ export default function EditPerusahaanPage() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3001/admin/users/${id}`,
+        `${baseURL}/admin/users/${id}`,
         {
           nama_perusahaan: nama,
           email,

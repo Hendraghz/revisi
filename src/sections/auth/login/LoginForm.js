@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 import { useAuth } from '../../../config/AuthContext';
+import baseURL from '../../../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ export default function LoginForm() {
     try {
       // Attempt to login with admin credentials
       const adminResponse = await axios.post(
-        'http://localhost:3001/admin/login',
+        `${baseURL}/admin/login`,
         {
           email: email,
           password: password,
@@ -40,7 +41,7 @@ export default function LoginForm() {
       try {
         // If admin login fails, attempt to login as a regular user
         const userResponse = await axios.post(
-          'http://localhost:3001/login',
+          `${baseURL}/login`,
           {
             email: email,
             password: password,

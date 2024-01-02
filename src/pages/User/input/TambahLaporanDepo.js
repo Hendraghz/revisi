@@ -10,6 +10,7 @@ import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Sel
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../../../config/useRequireAuth';
+import baseURL from '../../../config/url';
 
 export default function TambahAdminPage() {
   const { token, checkAndLogin } = useToken();
@@ -74,7 +75,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('kapasitas_digunakan', formData.kapasitas_digunakan);
       formDataForApi.append('surat', formData.surat);
 
-      const response = await axios.post('http://localhost:3001/petiKemas', formDataForApi, {
+      const response = await axios.post(`${baseURL}/petiKemas`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

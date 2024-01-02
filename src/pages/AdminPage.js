@@ -22,6 +22,7 @@ import {
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
 import { useAuth } from '../config/AuthContext';
+import baseURL from '../config/url';
 
 function createData(idAdmin, namaAdmin, emailAdmin, passwordAdmin) {
   return { idAdmin, namaAdmin, emailAdmin, passwordAdmin };
@@ -47,7 +48,7 @@ export default function AdminPage() {
   }, []);
 
   const getAdmins = async () => {
-    const response = await axios.get('http://localhost:3001/admin', {
+    const response = await axios.get(`${baseURL}/admin`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,7 +69,7 @@ export default function AdminPage() {
   const handleDelete = async (id) => {
     try {
       // Lakukan request DELETE ke endpoint yang sesuai
-      const response = await axios.delete(`http://localhost:3001/admin/${id}`, {
+      const response = await axios.delete(`${baseURL}/admin/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

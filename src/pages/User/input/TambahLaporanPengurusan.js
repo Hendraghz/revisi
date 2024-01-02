@@ -24,6 +24,7 @@ import {
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../../../config/useRequireAuth';
+import baseURL from '../../../config/url';
 
 export default function TambahAdminPage() {
   const [tokenref, setToken] = useState('');
@@ -121,7 +122,7 @@ export default function TambahAdminPage() {
 
   const refreshTokens = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/refresh');
+      const response = await axios.get(`${baseURL}/refresh`);
       setToken(response.data.accessToken);
       const decoded = jwtDecoded(response.data.accessToken);
       console.log(decoded);
@@ -142,7 +143,7 @@ export default function TambahAdminPage() {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
         try {
-          const response = await axios.get('http://localhost:3001/refresh');
+          const response = await axios.get(`${baseURL}/refresh`);
           config.headers.Authorization = `Bearer ${response.data.accessToken}`;
           setToken(response.data.accessToken);
           const decoded = jwtDecoded(response.data.accessToken);
@@ -247,7 +248,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('jml_muatan', totalVolume);
       formDataForApi.append('surat', formData.surat);
 
-      const response = await axios.post('http://localhost:3001/transportasi', formDataForApi, {
+      const response = await axios.post(`${baseURL}/transportasi`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

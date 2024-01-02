@@ -8,6 +8,7 @@ import { Container, Row, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [tally, setTally] = useState([]);
@@ -32,7 +33,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getTally = async () => {
-    const response = await axios.get(`http://localhost:3001/tally?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/tally?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadtally', {
+      const response = await axios.get(`${baseURL}/downloadtally`, {
         responseType: 'arraybuffer',
       });
 
@@ -75,7 +76,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/tally/${id}`, {
+      const response = await fetch(`${baseURL}/tally/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +107,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/tally/${id}/valid`, {
+      const response = await fetch(`${baseURL}/tally/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -276,7 +277,7 @@ export default function LaporanPage() {
                       <td>{row.muatan}</td>
                       <td>
                         <Link
-                          to={`http://localhost:3001/dokumen/${row.upload_surat_penunjukan}`}
+                          to={`${baseURL}/dokumen/${row.upload_surat_penunjukan}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

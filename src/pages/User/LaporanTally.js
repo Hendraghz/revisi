@@ -5,10 +5,11 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import jwtDecoded from 'jwt-decode';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Row, Table,  } from 'react-bootstrap';
+import { Container, Row, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import Iconify from '../../components/iconify';
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 export default function LaporanPageTally() {
   const [namaPerusahaan, setNamaPerusahaan] = useState('');
@@ -32,12 +33,12 @@ export default function LaporanPageTally() {
     checkAndLogin();
     getTally();
     if (selectedMonth !== '' && selectedYear !== '') {
-      getTally(); 
-     }
+      getTally();
+    }
   }, [selectedMonth, selectedYear]);
 
   const getTally = async () => {
-    const response = await axios.get(`http://localhost:3001/tally/show?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/tally/show?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +49,7 @@ export default function LaporanPageTally() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/tally/${id}`, {
+      const response = await fetch(`${baseURL}/tally/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -93,9 +94,9 @@ export default function LaporanPageTally() {
             </Button>
           </Link>
         </Stack>
-        <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
-        <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
             <Select
               labelId="demo-select-small-label"

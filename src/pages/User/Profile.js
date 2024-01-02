@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +31,7 @@ export default function Profile() {
   }, []);
 
   const getPerusahaan = async () => {
-    const response = await axios.get('http://localhost:3001/user', {
+    const response = await axios.get(`${baseURL}/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -42,7 +43,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3001/admin',
+        `${baseURL}/admin`,
         {
           nama,
           email,

@@ -9,6 +9,7 @@ import { Row, Table, Container } from 'react-bootstrap';
 import Iconify from '../components/iconify';
 import '../css/tableBongkar.css';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [bm, setBm] = useState([]);
@@ -33,7 +34,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getBm = async () => {
-    const response = await axios.get(`http://localhost:3001/bongkarMuat?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/bongkarMuat?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +45,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadbm', {
+      const response = await axios.get(`${baseURL}/downloadbm`, {
         responseType: 'arraybuffer',
       });
 
@@ -76,7 +77,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/bongkarMuat/${id}`, {
+      const response = await fetch(`${baseURL}/bongkarMuat/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,7 +108,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/bongkarMuat/${id}/valid`, {
+      const response = await fetch(`${baseURL}/bongkarMuat/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -294,17 +295,13 @@ export default function LaporanPage() {
                       <td>{row.pelabuhan_muat}</td>
                       <td>{row.tujuan}</td>
                       <td>
-                        <Link
-                          to={`http://localhost:3001/dokumen/${row.pdok_pbm}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <Link to={`${baseURL}/dokumen/${row.pdok_pbm}`} target="_blank" rel="noopener noreferrer">
                           {row.pdok_pbm}
                         </Link>
                       </td>
                       <td>
                         <Link
-                          to={`http://localhost:3001/dokumen/${row.surat_penunjukan_tally}`}
+                          to={`${baseURL}/dokumen/${row.surat_penunjukan_tally}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

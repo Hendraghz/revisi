@@ -8,6 +8,7 @@ import { Container, Row, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import useToken from '../../config/useRequireAuth';
 import Iconify from '../../components/iconify';
+import baseURL from '../../config/url';
 
 export default function LaporanPageAngkutan() {
   const [pelabuhan, setPelabuhan] = useState([]);
@@ -32,20 +33,17 @@ export default function LaporanPageAngkutan() {
   }, [selectedMonth, selectedYear]);
 
   const getPelabuhan = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/pelabuhan/show?month=${selectedMonth}&year=${selectedYear}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${baseURL}/pelabuhan/show?month=${selectedMonth}&year=${selectedYear}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setPelabuhan(response.data.data);
   };
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/pelabuhan/${id}`, {
+      const response = await fetch(`${baseURL}/pelabuhan/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +73,7 @@ export default function LaporanPageAngkutan() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadpelabuhan', {
+      const response = await axios.get(`${baseURL}/downloadpelabuhan`, {
         responseType: 'arraybuffer',
       });
 

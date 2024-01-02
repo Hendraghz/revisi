@@ -9,6 +9,7 @@ import { Row, Table, Container } from 'react-bootstrap';
 import Iconify from '../../components/iconify';
 import '../../css/tableBongkar.css';
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 export default function LaporanPageBongkar() {
   const [bm, setBm] = useState([]);
@@ -35,20 +36,17 @@ export default function LaporanPageBongkar() {
   }, [selectedMonth, selectedYear]);
 
   const getBm = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/bongkarMuat/show?month=${selectedMonth}&year=${selectedYear}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${baseURL}/bongkarMuat/show?month=${selectedMonth}&year=${selectedYear}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setBm(response.data.data);
   };
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/bongkarMuat/${id}`, {
+      const response = await fetch(`${baseURL}/bongkarMuat/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,

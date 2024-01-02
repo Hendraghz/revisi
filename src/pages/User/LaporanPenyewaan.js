@@ -8,6 +8,7 @@ import { Container, Table, Row } from 'react-bootstrap';
 import { Stack, Typography, Button, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import Iconify from '../../components/iconify';
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 export default function LaporanPagePenyewaan() {
   const [ppal, setPpal] = useState([]);
@@ -27,12 +28,12 @@ export default function LaporanPagePenyewaan() {
     checkAndLogin();
     getPpal();
     if (selectedMonth !== '' && selectedYear !== '') {
-     getPpal();
+      getPpal();
     }
-  },[selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear]);
 
   const getPpal = async () => {
-    const response = await axios.get(`http://localhost:3001/ppal/show?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/ppal/show?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function LaporanPagePenyewaan() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/ppal/${id}`, {
+      const response = await fetch(`${baseURL}/ppal/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,9 +88,9 @@ export default function LaporanPagePenyewaan() {
             </Button>
           </Link>
         </Stack>
-        <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
-        <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
             <Select
               labelId="demo-select-small-label"

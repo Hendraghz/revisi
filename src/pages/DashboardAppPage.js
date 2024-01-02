@@ -26,6 +26,7 @@ import {
 import { useAuth } from '../config/AuthContext';
 import useToken from '../config/useRequireAuth';
 import Geo from '../components/maps/Geo';
+import baseURL from '../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ export default function DashboardAppPage() {
   // });
 
   const getCount = async () => {
-    const response = await axios.get('http://localhost:3001/total', {
+    const response = await axios.get(`${baseURL}/total`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -82,7 +83,7 @@ export default function DashboardAppPage() {
   };
 
   const getBongkarMuAT = async () => {
-    const response = await axios.get('http://localhost:3001/sumbm');
+    const response = await axios.get(`${baseURL}/sumbm`);
     setBongkarMuat(response.data.data);
   };
   const chartLabelBongkar = bongkarMuat.map((item) => item.bulan);
@@ -102,7 +103,7 @@ export default function DashboardAppPage() {
   ];
 
   const getTally = async () => {
-    const response = await axios.get('http://localhost:3001/sumtrans');
+    const response = await axios.get(`${baseURL}/sumtrans`);
     setTransportasi(response.data.data);
   };
 
@@ -117,7 +118,7 @@ export default function DashboardAppPage() {
   ];
 
   const getDepo = async () => {
-    const response = await axios.get('http://localhost:3001/sumpk');
+    const response = await axios.get(`${baseURL}/sumpk`);
     setDepoPetikemas(response.data.data);
   };
 
@@ -132,7 +133,7 @@ export default function DashboardAppPage() {
   ];
 
   const getPelabuhan = async () => {
-    const response = await axios.get('http://localhost:3001/sumpelabuhan');
+    const response = await axios.get(`${baseURL}/sumpelabuhan`);
     setPelabuhan(response.data.data);
   };
 
@@ -153,7 +154,7 @@ export default function DashboardAppPage() {
   ];
 
   const getPPAL = async () => {
-    const response = await axios.get('http://localhost:3001/sumppal');
+    const response = await axios.get(`${baseURL}/sumppal`);
     setPPAL(response.data.data);
   };
 

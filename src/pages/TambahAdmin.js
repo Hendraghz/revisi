@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ export default function TambahAdminPage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3001/admin',
+        `${baseURL}/admin`,
         {
           nama,
           email,

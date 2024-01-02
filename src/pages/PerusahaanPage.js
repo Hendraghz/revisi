@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper';
 import Iconify from '../components/iconify';
 import users from '../_mock/user';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 function createData(id, namaPerusahaan, emailPerusahaan) {
   return { id, namaPerusahaan, emailPerusahaan };
@@ -32,7 +33,7 @@ export default function PerusahaanPage() {
   }, []);
 
   const getPerusahaan = async () => {
-    const response = await axios.get('http://localhost:3001/users', {
+    const response = await axios.get(`${baseURL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function PerusahaanPage() {
   const handleDelete = async (id) => {
     try {
       // Lakukan request DELETE ke endpoint yang sesuai
-      const response = await axios.delete(`http://localhost:3001/admin/users/${id}`, {
+      const response = await axios.delete(`${baseURL}/admin/users/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -62,7 +63,7 @@ export default function PerusahaanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadPerusahaan', {
+      const response = await axios.get(`${baseURL}/downloadPerusahaan`, {
         responseType: 'arraybuffer',
       });
 

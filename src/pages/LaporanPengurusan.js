@@ -8,6 +8,7 @@ import { Row, Container, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [transportasi, setTransportasi] = useState([]);
@@ -33,7 +34,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getTransportasi = async () => {
-    const response = await axios.get(`http://localhost:3001/transportasi?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/transportasi?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +45,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadtrans', {
+      const response = await axios.get(`${baseURL}/downloadtrans`, {
         responseType: 'arraybuffer',
       });
 
@@ -76,7 +77,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/transportasi/${id}`, {
+      const response = await fetch(`${baseURL}/transportasi/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,7 +108,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/transportasi/${id}/valid`, {
+      const response = await fetch(`${baseURL}/transportasi/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -295,11 +296,7 @@ export default function LaporanPage() {
                       <td>{row.ak_voulme}</td>
                       <td>{row.jml_muatan}</td>
                       <td>
-                        <Link
-                          to={`http://localhost:3001/dokumen/${row.surat}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <Link to={`${baseURL}/dokumen/${row.surat}`} target="_blank" rel="noopener noreferrer">
                           {row.surat}
                         </Link>
                       </td>

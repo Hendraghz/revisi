@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function EditAdminPage() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ export default function EditAdminPage() {
     getAdmin();
   }, []);
   const getAdmin = async () => {
-    const response = await axios.get(`http://localhost:3001/admin/${id}`, {
+    const response = await axios.get(`${baseURL}/admin/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +34,7 @@ export default function EditAdminPage() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3001/admin/${id}`,
+        `${baseURL}/admin/${id}`,
         {
           nama_perusahaan: nama,
           email,

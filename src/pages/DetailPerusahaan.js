@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ export default function DetailPerusahaan() {
   }, []);
 
   const getPerusahaan = async () => {
-    const response = await axios.get(`http://localhost:3001/admin/users/${id}`, {
+    const response = await axios.get(`${baseURL}/admin/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

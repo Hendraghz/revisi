@@ -8,6 +8,7 @@ import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } 
 import { Container, Table, Row } from 'react-bootstrap';
 import Iconify from '../components/iconify';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [ppal, setPpal] = useState([]);
@@ -32,7 +33,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getPpal = async () => {
-    const response = await axios.get(`http://localhost:3001/ppal?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/ppal?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadppal', {
+      const response = await axios.get(`${baseURL}/downloadppal`, {
         responseType: 'arraybuffer',
       });
 
@@ -75,7 +76,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/ppal/${id}`, {
+      const response = await fetch(`${baseURL}/ppal/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +107,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/ppal/${id}/valid`, {
+      const response = await fetch(`${baseURL}/ppal/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -264,11 +265,7 @@ export default function LaporanPage() {
                       <td>{row.jw_mulai}</td>
                       <td>{row.jw_selesai}</td>
                       <td>
-                        <Link
-                          to={`http://localhost:3001/dokumen/${row.surat}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <Link to={`${baseURL}/dokumen/${row.surat}`} target="_blank" rel="noopener noreferrer">
                           {row.surat}
                         </Link>
                       </td>

@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 // components
 import TextField from '@mui/material/TextField';
+import baseURL from '../../../config/url';
 import useToken from '../../../config/useRequireAuth';
 
 export default function EditLaporanPengurusan() {
@@ -87,7 +88,7 @@ export default function EditLaporanPengurusan() {
 
   const getTransportasi = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/transportasi/${id}/show`, {
+      const response = await axios.get(`${baseURL}/transportasi/${id}/show`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +105,7 @@ export default function EditLaporanPengurusan() {
         no_kendaraan: response.data.data.no_kendaraan,
         jenis_kegiatan: response.data.data.jenis_kegiatan,
         muatan: response.data.data.muatan,
-        jml_muatan : response.data.data.muatan,
+        jml_muatan: response.data.data.muatan,
         surat: response.data.data.surat,
       });
     } catch (error) {
@@ -222,7 +223,7 @@ export default function EditLaporanPengurusan() {
       formDataForApi.append('jml_muatan', totalVolume);
       formDataForApi.append('surat', formData.surat);
 
-      const response = await axios.put(`http://localhost:3001/transportasi/${id}/update`, formDataForApi, {
+      const response = await axios.put(`${baseURL}/transportasi/${id}/update`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

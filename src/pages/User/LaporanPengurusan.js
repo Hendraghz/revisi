@@ -8,6 +8,7 @@ import { Row, Container, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Iconify from '../../components/iconify';
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 export default function LaporanPagePengurusan() {
   const [transportasi, setTransportasi] = useState([]);
@@ -30,7 +31,7 @@ export default function LaporanPagePengurusan() {
     if (selectedMonth !== '' && selectedYear !== '') {
       getTransportasi();
     }
-  },[selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear]);
 
   const formatDate = (dateString) => {
     const dateObject = new Date(dateString);
@@ -41,7 +42,7 @@ export default function LaporanPagePengurusan() {
   };
 
   const getTransportasi = async () => {
-    const response = await axios.get(`http://localhost:3001/transportasi/show?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/transportasi/show?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -52,7 +53,7 @@ export default function LaporanPagePengurusan() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/transportasi/${id}`, {
+      const response = await fetch(`${baseURL}/transportasi/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,9 +97,9 @@ export default function LaporanPagePengurusan() {
             </Button>
           </Link>
         </Stack>
-        <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
-        <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
             <Select
               labelId="demo-select-small-label"

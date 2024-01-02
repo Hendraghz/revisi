@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 import { useAuth } from '../../../config/AuthContext';
+import baseURL from '../../../config/url';
 
 // ----------------------------------------------------------------------
 
@@ -129,7 +130,7 @@ export default function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/register', {
+      const response = await fetch(`${baseURL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

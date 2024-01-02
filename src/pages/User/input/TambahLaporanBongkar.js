@@ -6,21 +6,11 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 // @mui
-import {
-  Button,
-  Container,
-  Stack,
-  Typography,
-  Card,
-  FormControl,
-  FormLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../../../config/useRequireAuth';
-
+import baseURL from '../../../config/url';
 
 export default function TambahAdminPage() {
   const navigateTo = useNavigate();
@@ -100,22 +90,21 @@ export default function TambahAdminPage() {
       formDataForApi.append('pdok_pbm', pdokPbm);
       formDataForApi.append('surat_penunjukan_tally', suratPenunjukanTally);
 
-      const response = await axios.post('http://localhost:3001/bongkarMuat', formDataForApi, {
+      const response = await axios.post(`${baseURL}/bongkarMuat`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-      if(response.status === 200){
+      if (response.status === 200) {
         Swal.fire({
-          title: "Laporan Berhasil",
-          text: "Di tambahkan",
-          icon: "success"
+          title: 'Laporan Berhasil',
+          text: 'Di tambahkan',
+          icon: 'success',
         });
         navigateTo('/dashboard-user/laporan-user');
       }
       // Handle successful response
-      
     } catch (error) {
       console.error('Error posting data:', error);
     }
@@ -276,7 +265,7 @@ export default function TambahAdminPage() {
                   variant="outlined"
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
-                  value={formData.jml_bongkar }
+                  value={formData.jml_bongkar}
                   onChange={handleInputChange}
                   name="jml_bongkar"
                   size="small"
@@ -288,7 +277,7 @@ export default function TambahAdminPage() {
                   placeholder=""
                   sx={{ backgroundColor: '#fafafa', mb: 3 }}
                   name="jml_muat"
-                  value={formData.jml_muat  }
+                  value={formData.jml_muat}
                   onChange={handleInputChange}
                   size="small"
                 />
@@ -386,9 +375,14 @@ export default function TambahAdminPage() {
                 />
               </FormControl>
             </Stack>
-              <Button variant="contained" type="submit" sx={{ mt: 2, mb:3, ml:5 , height:40, width:120 }} color="success">
-                Submit
-              </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ mt: 2, mb: 3, ml: 5, height: 40, width: 120 }}
+              color="success"
+            >
+              Submit
+            </Button>
           </form>
         </Card>
       </Container>

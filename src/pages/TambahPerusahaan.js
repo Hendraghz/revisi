@@ -8,6 +8,7 @@ import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Men
 // components
 import TextField from '@mui/material/TextField';
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function TambahAdminPage() {
   const [nama, setNama] = useState('');
@@ -27,7 +28,7 @@ export default function TambahAdminPage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3001/admin/users',
+        `${baseURL}/admin/users`,
         {
           nama_perusahaan: nama,
           email,

@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Container, Stack, Typography, Card, FormControl, FormLabel, Select, MenuItem } from '@mui/material';
 // components
 import TextField from '@mui/material/TextField';
+import baseURL from '../../../config/url';
 import useToken from '../../../config/useRequireAuth';
-
 
 export default function TambahAdminPage() {
   const [expire, setExpire] = useState('');
@@ -20,7 +20,7 @@ export default function TambahAdminPage() {
 
   const [formData, setFormData] = useState({
     // eslint-disable-next-line object-shorthand
-    tanggal : "",
+    tanggal: '',
     // eslint-disable-next-line object-shorthand
     nama_perusahaan_penunjuk: '',
     nama_kapal: '',
@@ -63,8 +63,8 @@ export default function TambahAdminPage() {
     const email = decode.email;
     try {
       const formDataForApi = new FormData();
-      formDataForApi.append('tanggal',formData.tanggal);
-      formDataForApi.append('email',email);
+      formDataForApi.append('tanggal', formData.tanggal);
+      formDataForApi.append('email', email);
       formDataForApi.append('nama_perusahaan_penunjuk', formData.nama_perusahaan_penunjuk);
       formDataForApi.append('nama_kapal', formData.nama_kapal);
       formDataForApi.append('bendera', formData.bendera);
@@ -80,7 +80,7 @@ export default function TambahAdminPage() {
       formDataForApi.append('muatan', formData.muatan);
       formDataForApi.append('surat', formData.surat);
 
-      const response = await axios.post('http://localhost:3001/tally', formDataForApi, {
+      const response = await axios.post(`${baseURL}/tally`, formDataForApi, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
@@ -117,57 +117,57 @@ export default function TambahAdminPage() {
         <Card>
           <form onSubmit={handleFormSubmit}>
             <FormControl sx={{ ml: 5, mt: 3, mb: 3, width: 530 }}>
-            <FormLabel sx={{ color: 'black', mb:2 }}>Tanggal</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Tanggal</FormLabel>
               <TextField
                 type="date"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="tanggal"
                 value={formData.tanggal}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Perusahaan Penunjuk</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Perusahaan Penunjuk</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="nama_perusahaan_penunjuk"
                 value={formData.nama_perusahaan_penunjuk}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Nama Kapal</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Nama Kapal</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="nama_kapal"
                 value={formData.nama_kapal}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Type Kapal</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Type Kapal</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="type_kapal"
                 value={formData.type_kapal}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Bendera</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Bendera</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="bendera"
                 value={formData.bendera}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Kegiatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Kegiatan</FormLabel>
               <Select
                 labelId="select-kegiatan"
                 id="select-kegiatan"
@@ -175,7 +175,7 @@ export default function TambahAdminPage() {
                 label="Kegiatan"
                 name="kegiatan"
                 onChange={handleInputChange}
-                sx={{mb:3}}
+                sx={{ mb: 3 }}
               >
                 <MenuItem value={'stevedoring'}>Stevedoring</MenuItem>
                 <MenuItem value={'cargodoring'}>Cargodoring</MenuItem>
@@ -186,69 +186,69 @@ export default function TambahAdminPage() {
               </Select>
               <h2>Kegiatan Tally Mandiri</h2>
               <h3>Jumlah</h3>
-              <FormLabel sx={{ color: 'black', mb:2 }}>Bongkar</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Bongkar</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="jumlah_bongkar"
                 value={formData.jumlah_bongkar}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Muat</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Muat</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="jumlah_muat"
                 value={formData.jumlah_muat}
                 onChange={handleInputChange}
               />
               <h3>Mulai (jam)</h3>
-              <FormLabel sx={{ color: 'black', mb:2 }}>Bongkar</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Bongkar</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="jam_bongkar"
                 value={formData.jam_bongkar}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Muat</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Muat</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="jam_muat"
                 value={formData.jam_muat}
                 onChange={handleInputChange}
               />
               <h3>Selesai (jam)</h3>
-              <FormLabel sx={{ color: 'black',mb:2 }}>Bongkar</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Bongkar</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="selesai_bongkar"
                 value={formData.selesai_bongkar}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Muat</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Muat</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="selesai_muat"
                 value={formData.selesai_muat}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Lokasi Kegiatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Lokasi Kegiatan</FormLabel>
               <Select
                 labelId="select-lokasi"
                 id="select-lokasi"
@@ -256,28 +256,28 @@ export default function TambahAdminPage() {
                 name="lokasi_kegiatan"
                 onChange={handleInputChange}
                 label="Lokasi"
-                sx={{mb:3}}
+                sx={{ mb: 3 }}
               >
                 <MenuItem value={'pelabuhan'}>Pelabuhan</MenuItem>
                 <MenuItem value={'cargodoring'}>Terminal</MenuItem>
                 <MenuItem value={'receiving'}>Depo Petikemas</MenuItem>
                 <MenuItem value={'delivery'}>Gudang</MenuItem>
               </Select>
-              <FormLabel sx={{ color: 'black', mb:2 }}>Muatan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Muatan</FormLabel>
               <TextField
                 type="text"
                 variant="outlined"
                 placeholder=""
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 name="muatan"
                 value={formData.muatan}
                 onChange={handleInputChange}
               />
-              <FormLabel sx={{ color: 'black', mb:2 }}>Upload Surat Penunjukan</FormLabel>
+              <FormLabel sx={{ color: 'black', mb: 2 }}>Upload Surat Penunjukan</FormLabel>
               <TextField
                 type="file"
                 variant="outlined"
-                sx={{ backgroundColor: '#fafafa', mb:3 }}
+                sx={{ backgroundColor: '#fafafa', mb: 3 }}
                 onChange={handleFileChange}
                 name="surat"
               />

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MapContainer, TileLayer, Polygon, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { statesData } from './data';
+import baseURL from '../../config/url';
 
 const center = [-7.090911, 107.668887];
 
@@ -14,7 +15,7 @@ export default function Geo() {
   }, []);
 
   const getKota = async () => {
-    const response = await axios.get('http://localhost:3001/kota');
+    const response = await axios.get(`${baseURL}/kota`);
     setKota(response.data.data);
   };
 

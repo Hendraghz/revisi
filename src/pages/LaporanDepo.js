@@ -9,6 +9,7 @@ import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } 
 import Iconify from '../components/iconify';
 
 import useToken from '../config/useRequireAuth';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [petiKemas, setPetiKemas] = useState([]);
@@ -33,7 +34,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getPetiKemas = async () => {
-    const response = await axios.get(`http://localhost:3001/petiKemas?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/petiKemas?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +45,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadpk', {
+      const response = await axios.get(`${baseURL}/downloadpk`, {
         responseType: 'arraybuffer',
       });
 
@@ -76,7 +77,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/petiKemas/${id}`, {
+      const response = await fetch(`${baseURL}/petiKemas/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +107,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/petiKemas/${id}/valid`, {
+      const response = await fetch(`${baseURL}/petiKemas/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -259,11 +260,7 @@ export default function LaporanPage() {
                       <td>{row.kapasitas_depo}</td>
                       <td>{row.kapasitas_digunakan}</td>
                       <td>
-                        <Link
-                          to={`http://localhost:3001/dokumen/${row.surat}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <Link to={`${baseURL}/dokumen/${row.surat}`} target="_blank" rel="noopener noreferrer">
                           {row.surat}
                         </Link>
                       </td>

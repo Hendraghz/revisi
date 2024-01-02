@@ -8,6 +8,7 @@ import { Container, Row, Table } from 'react-bootstrap';
 import { Stack, Typography, Button, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import useToken from '../config/useRequireAuth';
 import Iconify from '../components/iconify';
+import baseURL from '../config/url';
 
 export default function LaporanPage() {
   const [pelabuhan, setPelabuhan] = useState([]);
@@ -32,7 +33,7 @@ export default function LaporanPage() {
   }, [selectedMonth, selectedYear]);
 
   const getPelabuhan = async () => {
-    const response = await axios.get(`http://localhost:3001/pelabuhan?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/pelabuhan?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function LaporanPage() {
   const handleExport = async () => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await axios.get('http://localhost:3001/downloadpelabuhan', {
+      const response = await axios.get(`${baseURL}/downloadpelabuhan`, {
         responseType: 'arraybuffer',
       });
 
@@ -75,7 +76,7 @@ export default function LaporanPage() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/pelabuhan/${id}`, {
+      const response = await fetch(`${baseURL}/pelabuhan/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +107,7 @@ export default function LaporanPage() {
   const handleValid = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/pelabuhan/${id}/valid`, {
+      const response = await fetch(`${baseURL}/pelabuhan/${id}/valid`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -268,11 +269,7 @@ export default function LaporanPage() {
                       <td>{row.terminal_asal}</td>
                       <td>{row.terminal_tujuan}</td>
                       <td>
-                        <Link
-                          to={`http://localhost:3001/dokumen/${row.surat}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <Link to={`${baseURL}/dokumen/${row.surat}`} target="_blank" rel="noopener noreferrer">
                           {row.surat}
                         </Link>
                       </td>

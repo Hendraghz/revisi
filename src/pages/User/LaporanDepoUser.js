@@ -9,6 +9,7 @@ import { Stack, Typography, Button, FormControl, InputLabel, Select, MenuItem } 
 import Iconify from '../../components/iconify';
 
 import useToken from '../../config/useRequireAuth';
+import baseURL from '../../config/url';
 
 export default function LaporanPageDepo() {
   const [petiKemas, setPetiKemas] = useState([]);
@@ -28,12 +29,12 @@ export default function LaporanPageDepo() {
     checkAndLogin();
     getPetiKemas();
     if (selectedMonth !== '' && selectedYear !== '') {
-      getPetiKemas(); 
-     }
-  },[selectedMonth, selectedYear]);
+      getPetiKemas();
+    }
+  }, [selectedMonth, selectedYear]);
 
   const getPetiKemas = async () => {
-    const response = await axios.get(`http://localhost:3001/petiKemas/show?month=${selectedMonth}&year=${selectedYear}`, {
+    const response = await axios.get(`${baseURL}/petiKemas/show?month=${selectedMonth}&year=${selectedYear}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ export default function LaporanPageDepo() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to your API endpoint using fetch
-      const response = await fetch(`http://localhost:3001/petiKemas/${id}`, {
+      const response = await fetch(`${baseURL}/petiKemas/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,9 +88,9 @@ export default function LaporanPageDepo() {
             </Button>
           </Link>
         </Stack>
-        <Typography  sx={{ mb:2, mt:3, color:'red'}}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
+        <Typography sx={{ mb: 2, mt: 3, color: 'red' }}>*Untuk Filter data silahkan pilih Bulan dan Tahun</Typography>
         <Container fluid>
-        <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
+          <FormControl sx={{ mb: 2, minWidth: 180 }} size="small">
             <InputLabel id="demo-select-small-label">Filter Bulan</InputLabel>
             <Select
               labelId="demo-select-small-label"
